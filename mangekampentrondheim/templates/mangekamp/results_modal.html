@@ -1,0 +1,25 @@
+<div class="modal-header">
+    <script>
+
+        $(".modal-close").click(function() {
+            $("#modal_dialog").modal("hide");
+        });
+
+    </script>
+<button type="button" class="close modal-close" data-dismiss="modal" aria-hidden="true">&times;</button>
+<h3>Resultater for {{ s.participation.event.name }}</h3>
+</div>
+<div class="modal-body">
+<p>
+{% if scores %}
+    {% for s in scores %}
+    {{ s }}<br />
+    {% endfor %}
+{% else %}
+   Det foreligger ingen resultater for denne konkurransen. Trolig har ikke ansvarlig registrert poengene i systemet ennå. 
+{% endif %}
+</p>
+</div>
+<div class="modal-footer">
+<a class="btn modal-close">Close</a>
+</div>

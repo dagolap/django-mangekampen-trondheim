@@ -36,10 +36,27 @@ class Event(models.Model):
     finished = models.BooleanField()
     season = models.ForeignKey(Season)
 
+    def __unicode__(self):
+        return "{0} - {1}".format(self.name, self.season)
+    
+    def get_scores(self):
+        return Score.objects.filter(participation__event=self).order_by('-score')
+
+    @property
+    def participants(self):
+        return Participation.objects.filter(event=self)
+    
+
 class Participation(models.Model):
     event = models.ForeignKey(Event)
     participant = models.ForeignKey(User)
 
+    def __unicode__(self):
+        return "{0} ({1}) - {2}".format(self.event.name, self.event.season.title, self.participant)
+
 class Score(models.Model):
     participation = models.ForeignKey(Participation)
     score = models.IntegerField()
+
+    def __unicode__(self):
+        return "{0}: {1} ({2})".format(self.participation.participant, self.score, self.participation.event)
