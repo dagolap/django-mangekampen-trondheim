@@ -20,10 +20,10 @@ class Season(models.Model):
             pass
 
     def get_past_events(self):
-        return Event.objects.filter(time__lt=datetime.today())
+        return Event.objects.filter(time__lt=datetime.today(), season=self)
 
     def get_future_events(self):
-        return Event.objects.filter(time__gte=datetime.today())
+        return Event.objects.filter(time__gte=datetime.today(), season=self)
 
 
 
