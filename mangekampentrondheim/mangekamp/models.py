@@ -28,6 +28,12 @@ class Season(models.Model):
 
 
 class Event(models.Model):
+    CATEGORY_CHOICES = (
+            (1, "Teknikk"),
+            (2, "Utholdenhet"),
+            (3, "Ball")
+        )
+
     name = models.CharField(max_length=50)
     description = models.TextField()
     time = models.DateTimeField()
@@ -35,6 +41,7 @@ class Event(models.Model):
     location_url = models.URLField(max_length=500)
     finished = models.BooleanField()
     season = models.ForeignKey(Season)
+    category = models.IntegerField(choices=CATEGORY_CHOICES)
 
     def __unicode__(self):
         return "{0} - {1}".format(self.name, self.season)

@@ -56,7 +56,17 @@
 
 {% block content %}
       <div class="row-fluid">
-        <div class="span12">
+        <div class="span2">
+            <h1>Denne sesongen</h1>
+            <ul>
+                <li>dagolap</li>
+                <li>arzmir</li>
+            </ul>
+            <p>
+                <a class="btn btn-block">Detaljert scoreboard</a>
+            </p>
+        </div>
+        <div class="span10">
           <div class="hero-unit">
             <h1>Velkommen til mangekampen!</h1>
             <p>
@@ -64,13 +74,13 @@
             <p>
                 Vi er nå godt i gang med en sesong som varer fra {{ current_season.startDate }} til {{ current_season.endDate }}
             </p>
-            <p><a class="btn btn-primary btn-large">Se highscore!</a></p>
             {% else %}
             <p>
                 Akkurat nå er det ingen sesong gående, men vi gleder oss alle til høsten begynner og en ny sesong står for tur!
             </p>
             {% endif %}
           </div>
+      </div>
           <h1>Neste events</h1>
           <div class="row-fluid">
             {% for event in future_events %}
