@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import collections
 from datetime import datetime
-from itertools import chain
+from itertools import chain, groupby
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -41,6 +40,49 @@ class Season(models.Model):
         scores = [(user, participants.count(user)) for user in users]
         scores.sort(key=lambda u: u[1], reverse=True)
         return scores
+    
+    def scoreboard(self):
+        finished_events = self.get_finished_events()
+        future_events = self.get_future_events()
+
+        all_events = []
+        for event in finished_events:
+            all_events.append(event)
+
+        for event in future_events:
+            all_events.append(event)
+
+        all_events.sort(key=lambda e: e.category)
+        all_events = groupby(all_events, lambda e: e.category)
+        sorted_events = [] 
+        for key, group in all_events:
+            group = list(group)
+            group.sort(key=lambda e: e.name)
+            sorted_events.append(group)
+
+        active_users = User.objects.filter(is_active=True)
+        print active_users
+        print sorted_events
+
+        stat_dict = {}
+        for user in active_users:
+            stat_dict[user.username] = {'attendance':0, 'categories':[], 'events':{}}
+
+        for group in sorted_events:
+            for event in group:
+                for score in Score.objects.filter(participation__event=event):
+                    username = score.participation.participant.username
+                    stat_dict[username]['events'][event.name] = score.score
+                    stat_dict[username]['attendance'] += 1
+                    if not event.category in stat_dict[username]['categories']:
+                        stat_dict[username]['categories'].append(event.category)
+
+        print stat_dict
+
+
+        return "lol"
+        
+        
 
 
 
