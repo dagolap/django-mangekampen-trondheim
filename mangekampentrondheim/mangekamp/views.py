@@ -77,6 +77,13 @@ def results_modal(request, event_id):
 def activity_board(request, season_id):
     season = get_object_or_404(Season, id=season_id)
     context = {'scores':season.get_activity_board()}
+    return render(request, 'mangekamp/activity_board.html', context)
+
+@login_required
+def scoreboard(request, season_id):
+    season = get_object_or_404(Season, id=season_id)
+    context = {}
+
     return render(request, 'mangekamp/scoreboard.html', context)
 
 @login_required
