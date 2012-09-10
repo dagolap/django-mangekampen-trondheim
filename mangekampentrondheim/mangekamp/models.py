@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import collections
 from datetime import datetime
 from itertools import chain
