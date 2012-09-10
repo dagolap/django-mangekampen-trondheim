@@ -3,7 +3,7 @@
 {% block scripts %}
 <script>
     $(document).ready(function() {
-        $("#scoreboard").load("/scoreboard/{{ current_season.id}}");
+        $("#scoreboard").load("/activity_board/{{ current_season.id}}");
     });
 
     $(".results_btn").click(function() {
