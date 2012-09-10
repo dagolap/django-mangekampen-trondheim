@@ -16,6 +16,8 @@ def home(request):
         future_events = current_season.get_future_events()
         past_events = current_season.get_past_events()
 
+    current_season.get_scoreboard()
+
     context = {
             'future_events':future_events,
             'past_events':past_events,
@@ -65,11 +67,15 @@ def toggle_signup(request, event_id):
 def results_modal(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     scores = event.get_scores()
-    print(scores)
-
     
     context = {'scores':scores}
     return render(request, 'mangekamp/results_modal.html', context)
+
+@login_required
+def scoreboard(request, season_id):
+    season = get_object_or_404(Season, id=season_id)
+    context = {'scores':season.get_scoreboard()}
+    return render(request, 'mangekamp/scoreboard.html', context)
 
 @login_required
 def event_listing(request, season):

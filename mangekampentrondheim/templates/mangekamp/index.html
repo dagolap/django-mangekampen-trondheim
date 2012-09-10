@@ -2,18 +2,34 @@
 {% load filters %}
 {% block scripts %}
 <script>
+    $(document).ready(function() {
+        $("#scoreboard").load("/scoreboard/{{ current_season.id}}");
+    });
+
     $(".results_btn").click(function() {
         var btn = $(this);
+        var loading = $("#loading-indicator");
+        var loading_anim_timer = setTimeout(function() {
+            loading.show();
+        }, 100);
         var event_id = btn.attr('id').split("_")[1];
         $("#modal_dialog").load("/results/"+event_id, function() {
             $("#modal_dialog").modal();
+            clearTimeout(loading_anim_timer);
+            loading.hide();
         });
     });
 
     $(".signup_btn").click(function() {
         var clicked_button = $(this);
         var event_id = $(this).attr('id').split("_")[1];
+        var loading = $("#loading-indicator");
+        var loading_anim_timer = setTimeout(function() {
+            loading.show();
+        }, 10);
         $.ajax({url:"/signup/"+event_id}).done(function(data) {
+            clearTimeout(loading_anim_timer);
+            loading.hide();
             var result = jQuery.parseJSON(data);
             if (result.signed_up == true) {
                 clicked_button.html("Påmeldt");
@@ -24,7 +40,6 @@
                 clicked_button.removeClass("btn-success btn-danger signed_up");
             }
         });
-        //alert("lol");
     });
 
     $(".signup_btn").mouseover(function() {
@@ -56,16 +71,11 @@
 
 {% block content %}
       <div class="row-fluid">
-        <div class="span2">
-            <h1>Denne sesongen</h1>
-            <ul>
-                <li>dagolap</li>
-                <li>arzmir</li>
-            </ul>
-            <p>
-                <a class="btn btn-block">Detaljert scoreboard</a>
-            </p>
-        </div>
+          <div class="span2" id="scoreboard">
+              <p class="pagination-centered" style="font-size:2em;">
+                Henter scoreboard...
+              </p>
+          </div>
         <div class="span10">
           <div class="hero-unit">
             <h1>Velkommen til mangekampen!</h1>

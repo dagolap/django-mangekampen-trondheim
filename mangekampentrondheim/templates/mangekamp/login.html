@@ -1,11 +1,57 @@
 {% extends 'mangekamp/base.html' %}
-{% block content %}
-<form method="post" action="{% url login %}">
-    {% csrf_token %}
-    <p><label for="id_username">Username:</label> <input id="id_username" type="text" name="username" maxlength="30" /></p>
-    <p><label for="id_password">Password:</label> <input type="password" name="password" id="id_password" /></p>
 
-    <input type="submit" value="Log in" />
-    <input type="hidden" name="next" value="{{ next }}" />
-</form>
+{% block scripts %}
+<script>
+    $("#show-registration").click(function() {
+        $("#login-form").hide();
+        $("#registration-form").show(); 
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row-fluid" id="login-form" style="text-align: center;"> 
+    <div class="span12">
+        <h1>Logg inn</h1>
+        <form method="post" action="{% url login %}" class="form-horizontal">
+            {% csrf_token %}
+            <div class="control-group">
+                <label for="id_username">Brukernavn:</label> 
+                <input id="id_username" type="text" name="username" maxlength="30" />
+            </div>
+            <div class="control-group">
+                <label for="id_password">Passord:</label> 
+                <input type="password" name="password" id="id_password" /></p>
+            </div>
+            <div class="control-group">
+                <input type="submit" class="btn btn-primary" value="Logg inn" />
+                <input type="hidden" name="next" value="{{ next }}" />
+            </div>
+        </form>
+        <div class="row-fluid">
+            <a class="btn" id="show-registration">Ny bruker</a>
+        </div>
+    </div>
+</div>
+<div class="row-fluid" id="registration-form" style="display: none; text-align: center;">
+    <div class="span12">
+        <form method="post" action="{% url login %}" >
+            {% csrf_token %}
+            <label for="id_username">Ønsket brukernavn:</label> 
+            <input id="id_username" type="text" name="username" maxlength="30" />
+            <label for="id_email">Epost:</label> 
+            <input id="id_email" type="text" name="email" maxlength="30" />
+            <label for="id_password">Passord:</label> 
+            <input type="password" name="password" id="id_password" /></p>
+            <label for="id_repeat_password">Gjenta passord:</label> 
+            <input type="password" name="repeat-password" id="id_repeat_password" /></p>
+            <label for="id_first_name">Fornavn:</label> 
+            <input type="text" name="first_name" id="id_first_name" /></p>
+            <label for="id_password">Etternavn:</label> 
+            <input type="text" name="last_name" id="id_last_name" /></p>
+            <input type="submit" value="Log in" />
+            <input type="hidden" name="next" value="{{ next }}" />
+        </form>
+    </div>
+</div>
 {% endblock %}

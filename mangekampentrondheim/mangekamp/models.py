@@ -1,4 +1,6 @@
+import collections
 from datetime import datetime
+from itertools import chain
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -24,6 +26,20 @@ class Season(models.Model):
 
     def get_future_events(self):
         return Event.objects.filter(time__gte=datetime.today(), season=self)
+
+    def get_finished_events(self):
+        return Event.objects.filter(finished=True, season=self)
+
+    def get_scoreboard(self):
+        events = self.get_finished_events()
+        participants = [e.participants for e in events]
+        participants = list(chain(*participants))
+
+        users = User.objects.all()
+        scores = [(user, participants.count(user)) for user in users]
+        scores.sort(key=lambda u: u[1], reverse=True)
+        return scores
+
 
 
 
@@ -51,8 +67,8 @@ class Event(models.Model):
 
     @property
     def participants(self):
-        return Participation.objects.filter(event=self)
-    
+        return [p.participant for p in Participation.objects.filter(event=self)]
+
 
 class Participation(models.Model):
     event = models.ForeignKey(Event)
