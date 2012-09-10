@@ -84,7 +84,16 @@ def scoreboard(request, season_id):
     season = get_object_or_404(Season, id=season_id)
     context = {}
 
-    return render(request, 'mangekamp/scoreboard.html', context)
+    context['users'] = season.scoreboard()
+    grouped_events = season.scoreboard_events()
+    flattened_events = []
+    for group in grouped_events:
+        for event in group:
+            flattened_events.append(event)
+    context['events'] = flattened_events
+    print flattened_events
+
+    return render(request, 'mangekamp/full_scoreboard.html', context)
 
 @login_required
 def event_listing(request, season):

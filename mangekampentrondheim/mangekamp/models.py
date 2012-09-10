@@ -2,6 +2,7 @@
 
 from datetime import datetime
 from itertools import chain, groupby
+from collections import OrderedDict
 
 from django.db import models
 from django.contrib.auth.models import User
@@ -41,7 +42,7 @@ class Season(models.Model):
         scores.sort(key=lambda u: u[1], reverse=True)
         return scores
     
-    def scoreboard(self):
+    def scoreboard_events(self):
         finished_events = self.get_finished_events()
         future_events = self.get_future_events()
 
@@ -60,16 +61,23 @@ class Season(models.Model):
             group.sort(key=lambda e: e.name)
             sorted_events.append(group)
 
-        active_users = User.objects.filter(is_active=True)
-        print active_users
-        print sorted_events
+        return sorted_events
 
+    def scoreboard(self):
+        active_users = User.objects.filter(is_active=True)
+        sorted_events = self.scoreboard_events()
         stat_dict = {}
         for user in active_users:
-            stat_dict[user.username] = {'attendance':0, 'categories':[], 'events':{}}
+            stat_dict[user.username] = OrderedDict()
+            stat_dict[user.username]['attendance'] = 0
+            stat_dict[user.username]['categories'] = []
+            stat_dict[user.username]['events'] = OrderedDict()
 
         for group in sorted_events:
             for event in group:
+                for user in active_users:
+                    stat_dict[user.username]['events'][event.name] = 0
+
                 for score in Score.objects.filter(participation__event=event):
                     username = score.participation.participant.username
                     stat_dict[username]['events'][event.name] = score.score
@@ -80,7 +88,7 @@ class Season(models.Model):
         print stat_dict
 
 
-        return "lol"
+        return stat_dict
         
         
 

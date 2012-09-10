@@ -6,5 +6,5 @@ urlpatterns = patterns('mangekamp.views',
     url(r'^signup/(?P<event_id>\d+)/$', 'toggle_signup', name='toggle_signup'),
     url(r'^results/(?P<event_id>\d+)/$', 'results_modal', name='results_modal'),
     url(r'^activity_board/(?P<season_id>\d+)/$', 'activity_board', name='activity_board'),
-    url(r'^scoreboard/(?P<season_id>\d+)/$', 'scoreboardboard', name='scoreboard'),
+    url(r'^scoreboard/(?P<season_id>\d+)/$', 'scoreboard', name='scoreboard'),
 )
