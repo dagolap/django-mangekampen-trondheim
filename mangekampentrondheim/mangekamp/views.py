@@ -18,8 +18,6 @@ def home(request):
         future_events = current_season.get_future_events()
         past_events = current_season.get_past_events()
 
-    current_season.get_scoreboard()
-
     context = {
             'future_events':future_events,
             'past_events':past_events,
@@ -76,7 +74,7 @@ def results_modal(request, event_id):
 @login_required
 def scoreboard(request, season_id):
     season = get_object_or_404(Season, id=season_id)
-    context = {'scores':season.get_scoreboard()}
+    context = {'scores':season.get_activity_board()}
     return render(request, 'mangekamp/scoreboard.html', context)
 
 @login_required

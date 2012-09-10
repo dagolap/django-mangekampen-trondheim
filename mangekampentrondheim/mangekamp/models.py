@@ -1,4 +1,4 @@
-# -*- encoding: utf-8 -*-
+# -*- coding: utf-8 -*-
 
 import collections
 from datetime import datetime
@@ -32,7 +32,7 @@ class Season(models.Model):
     def get_finished_events(self):
         return Event.objects.filter(finished=True, season=self)
 
-    def get_scoreboard(self):
+    def get_activity_board(self):
         events = self.get_finished_events()
         participants = [e.participants for e in events]
         participants = list(chain(*participants))
