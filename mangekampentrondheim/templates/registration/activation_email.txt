@@ -1,0 +1,10 @@
+Du (eller noen som later som om de er deg) har opprettet en konto på
+{{ site.name }}. Om dette ikke var deg kan du trygt ignorere denne eposten.
+
+For å aktivere kontoen din gå til følgende adresse innen {{expiration_days}} dager:
+
+http://{{site.domain}}{% url registratin_activate activation_key %}
+
+MvH
+
+Mangekampen-systemet for Trondheim

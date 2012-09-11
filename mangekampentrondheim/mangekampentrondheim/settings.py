@@ -22,7 +22,7 @@ DATABASES = {
 
 ################
 
-LOGIN_URL = "/login"
+LOGIN_URL = "/accounts/login/"
 
 TEMPLATE_CONTEXT_PROCESSORS = (
    'django.core.context_processors.request',
@@ -49,6 +49,15 @@ TIME_ZONE = 'Europe/Oslo'
 LANGUAGE_CODE = 'nb-no'
 
 SITE_ID = 1
+
+
+# Registration settings
+ACCOUNT_ACTIVATION_DAYS=7
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_HOST_USER='Capgemini.Trondheim.MK@gmail.com'
+EMAIL_HOST_PASSWORD='Aevie0up'
+EMAIL_USE_TLS=True
 
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
@@ -140,13 +149,12 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
     'grappelli',
     'filebrowser',
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'south',
+    'registration',
     'mangekamp',
 )
 
