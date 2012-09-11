@@ -11,6 +11,8 @@ class Season(models.Model):
     startDate = models.DateField()
     endDate = models.DateField()
     title = models.CharField(max_length=50)
+    required_categories = models.IntegerField(default=3)
+    required_events = models.IntegerField(default=7)
 
     def __unicode__(self):
         return "{0} / {1} - {2}".format(self.startDate.year, self.endDate.year, self.title)
