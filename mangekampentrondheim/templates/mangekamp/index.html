@@ -94,7 +94,10 @@
           <h1>Neste events</h1>
           <div class="row-fluid">
             {% for event in future_events %}
-            <div class="span4">
+            <div class="span1">
+                <img src="{{ event.image.url }}"></img>
+            </div>
+            <div class="span3">
               <h2>{{ event.name }}</h2>
               <p>
                     <b>Tid:</b> {{ event.time }}<br />
@@ -114,7 +117,10 @@
           <h1>Forrige events</h1>
           <div class="row-fluid">
             {% for event in past_events %}
-            <div class="span4">
+            <div class="span1">
+                <img src="{{ event.image.url }}"></img>
+            </div>
+            <div class="span3">
               <h2>{{ event.name }}</h2>
               <p>
                     <b>Tid:</b> {{ event.time }}<br />
