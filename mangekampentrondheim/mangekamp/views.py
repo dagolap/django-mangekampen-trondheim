@@ -85,13 +85,13 @@ def scoreboard(request, season_id):
     context = {}
 
     context['users'] = season.scoreboard()
+    context['season'] = season
     grouped_events = season.scoreboard_events()
     flattened_events = []
     for group in grouped_events:
         for event in group:
             flattened_events.append(event)
     context['events'] = flattened_events
-    print flattened_events
 
     return render(request, 'mangekamp/full_scoreboard.html', context)
 

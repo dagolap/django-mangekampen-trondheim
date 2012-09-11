@@ -19,7 +19,7 @@
         {% for key, value in users.items %}
         <tr>
             <td>
-                {{ key }}
+                {{ key.get_full_name }}
             </td>
             <td>
                 {{ value.attendance }} / 7
@@ -28,7 +28,7 @@
                 {{ value.categories|length }} / 3
             </td>
             <td>
-                {{ key|to_mangekjemper_status:value|safe }}
+                {{ season|to_mangekjemper_status:value|safe }}
             </td>
             {% for field, fieldvalue in value.items %}
                 {% if field == "events" %}

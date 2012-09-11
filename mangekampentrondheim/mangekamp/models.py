@@ -70,25 +70,22 @@ class Season(models.Model):
         sorted_events = self.scoreboard_events()
         stat_dict = {}
         for user in active_users:
-            stat_dict[user.username] = OrderedDict()
-            stat_dict[user.username]['attendance'] = 0
-            stat_dict[user.username]['categories'] = []
-            stat_dict[user.username]['events'] = OrderedDict()
+            stat_dict[user] = OrderedDict()
+            stat_dict[user]['attendance'] = 0
+            stat_dict[user]['categories'] = []
+            stat_dict[user]['events'] = OrderedDict()
 
         for group in sorted_events:
             for event in group:
                 for user in active_users:
-                    stat_dict[user.username]['events'][event.name] = 0
+                    stat_dict[user]['events'][event.name] = 0
 
                 for score in Score.objects.filter(participation__event=event):
-                    username = score.participation.participant.username
-                    stat_dict[username]['events'][event.name] = score.score
-                    stat_dict[username]['attendance'] += 1
-                    if not event.category in stat_dict[username]['categories']:
-                        stat_dict[username]['categories'].append(event.category)
-
-        print stat_dict
-
+                    participant = score.participation.participant
+                    stat_dict[participant]['events'][event.name] = score.score
+                    stat_dict[participant]['attendance'] += 1
+                    if not event.category in stat_dict[participant]['categories']:
+                        stat_dict[participant]['categories'].append(event.category)
 
         return stat_dict
         

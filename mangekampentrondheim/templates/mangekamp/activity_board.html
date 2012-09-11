@@ -9,7 +9,7 @@
     <tbody>
         {% for score in scores %}
         <tr>
-            <td>{{ score.0 }}</td>
+            <td>{{ score.0.get_full_name }}</td>
             <td class="activity-attendance">{{ score.1 }}</td>
         </tr>
         {% empty %}
