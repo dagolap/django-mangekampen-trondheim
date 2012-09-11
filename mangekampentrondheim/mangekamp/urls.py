@@ -7,4 +7,6 @@ urlpatterns = patterns('mangekamp.views',
     url(r'^results/(?P<event_id>\d+)/$', 'results_modal', name='results_modal'),
     url(r'^activity_board/(?P<season_id>\d+)/$', 'activity_board', name='activity_board'),
     url(r'^scoreboard/(?P<season_id>\d+)/$', 'scoreboard', name='scoreboard'),
+    url(r'^scoreboard/excel/(?P<season_id>\d+)/$', 'scoreboard_excel', name='scoreboard_excel'),
 )
+

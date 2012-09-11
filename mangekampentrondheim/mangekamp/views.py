@@ -108,5 +108,22 @@ def event_listing(request, season):
             }
             
     
-    return render(request, 'mangekamp/eventlisting.html', {'previous_events':previous_events, 'future_events':future_events})
+    return render(request, 'mangekamp/eventlisting.html', {'previous_events':past_events, 'future_events':future_events})
 
+@login_required
+def scoreboard_excel(request, season_id):
+    import xlwt
+    current_season = Season.get_current_season()
+    scoreboard = current_season.scoreboard()
+    print scoreboard
+
+    response = HttpResponse(mimetype="application/ms-excel")
+    response['Content-Disposition'] = 'attachment; filename=scoreboard.xls'
+    
+    doc = xlwt.Workbook()
+    sheet = doc.add_sheet('Alle')
+    sheet.write(0,0,'test test test')
+    
+    doc.save(response)
+
+    return response
