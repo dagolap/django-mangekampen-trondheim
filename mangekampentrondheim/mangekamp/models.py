@@ -117,7 +117,7 @@ class Event(models.Model):
         return "{0} - {1}".format(self.name, self.season)
     
     def get_scores(self):
-        return Score.objects.filter(participation__event=self).order_by('-score')
+        return Score.objects.filter(participation__event=self).order_by('score')
 
     @property
     def participants(self):

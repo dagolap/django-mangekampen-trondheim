@@ -122,6 +122,9 @@
             </div>
             <div class="span3">
               <h2>{{ event.name }}</h2>
+            <div class="span1">
+                <img src="{{ event.image.url }}"></img>
+            </div>
               <p>
                     <b>Tid:</b> {{ event.time }}<br />
                     <b>Sted:</b> <a href="{{event.location_url}}">{{event.location}}</a><br />

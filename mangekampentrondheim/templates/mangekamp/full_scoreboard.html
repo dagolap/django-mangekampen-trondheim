@@ -1,6 +1,26 @@
 {% extends 'mangekamp/base.html' %}
 {% load filters %}
 
+{% block scripts %}
+<script>
+    $(".results_btn").click(function() {
+        var btn = $(this);
+        var loading = $("#loading-indicator");
+        var loading_anim_timer = setTimeout(function() {
+            loading.show();
+        }, 100);
+        var event_id = btn.attr('id').split("_")[1];
+        $("#modal_dialog").load("/results/"+event_id, function() {
+            $("#modal_dialog").modal();
+            clearTimeout(loading_anim_timer);
+            loading.hide();
+        });
+    });
+
+</script>
+
+{% endblock %}
+
 {% block content %}
 
 <table class="table table-hover full-scoreboard">
@@ -11,7 +31,7 @@
             <th>Kategorier</th>
             <th>Status</th>       
             {% for event in events %}
-            <th>{{ event.name }}</th>    
+            <th><a class="btn btn-primary results_btn" id="results_{{event.id}}" >{{ event.name }}</a></th>    
             {% endfor %}
         </tr>
     </thead>
@@ -42,8 +62,6 @@
     </tbody>
 </table>
 
-{% endblock %}
-
-
-{% block scripts %}
+    <div class="modal" style="display:none;" id="modal_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    </div>
 {% endblock %}

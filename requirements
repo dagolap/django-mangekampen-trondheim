@@ -7,3 +7,4 @@ django-filebrowser==3.5.0
 django-grappelli==2.4.0
 django-registration==0.8
 wsgiref==0.1.2
+xlwt==0.7.4
