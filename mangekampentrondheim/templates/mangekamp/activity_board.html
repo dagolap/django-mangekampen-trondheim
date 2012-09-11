@@ -1,13 +1,22 @@
-{% if scores %}
 <h1>Mest aktive</h1>
-<ul>
-    {% for score in scores %}
-        <li>{{ score.0 }} - {{ score.1 }} arrangementer</li>    
-    {% endfor %}
-</ul>
+<table class=" table table-hover activity-table">
+    <thead>
+        <tr>
+            <th>Deltaker</th>
+            <th class="activity-attendance">Arrangementer</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for score in scores %}
+        <tr>
+            <td>{{ score.0 }}</td>
+            <td class="activity-attendance">{{ score.1 }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="2">Foreløpig ingen registrerte resultater</td></tr>
+        {% endfor %}
+    </tbody>
+</table>
 <p>
-    <a class="btn btn-block">Detaljert scoreboard</a>
+    <a class="btn btn-block" href="{% url scoreboard season_id %}">Detaljert scoreboard</a>
 </p>
-{% else %}
-<p>Fant ingen deltakere å legge til på scoreboardet. Trolig har det ikke vært avholdt noen konkurranser denne sesongen.</p>
-{% endif %}

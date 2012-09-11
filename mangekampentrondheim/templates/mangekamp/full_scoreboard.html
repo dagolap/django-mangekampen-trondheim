@@ -1,36 +1,45 @@
 {% extends 'mangekamp/base.html' %}
+{% load filters %}
 
 {% block content %}
 
-<table>
-    <tr>
-        <th>Navn</th>
-        <th>Arrangementer</th>
-        <th>Kategorier</th>
-        {% for event in events %}
-        <th>{{ event.name }}</th>    
+<table class="table table-hover full-scoreboard">
+    <thead>
+        <tr>
+            <th>Navn</th>
+            <th>Arrangementer</th>
+            <th>Kategorier</th>
+            <th>Status</th>       
+            {% for event in events %}
+            <th>{{ event.name }}</th>    
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for key, value in users.items %}
+        <tr>
+            <td>
+                {{ key }}
+            </td>
+            <td>
+                {{ value.attendance }} / 7
+            </td>
+            <td>
+                {{ value.categories|length }} / 3
+            </td>
+            <td>
+                {{ key|to_mangekjemper_status:value|safe }}
+            </td>
+            {% for field, fieldvalue in value.items %}
+                {% if field == "events" %}
+                    {% for eventname, score in fieldvalue.items %}
+                    <td>{{ score }}</td>
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        </tr>
         {% endfor %}
-    </tr>
-    {% for key, value in users.items %}
-    <tr>
-        <td>
-            {{ key }}
-        </td>
-        <td>
-            {{ value.attendance }}
-        </td>
-        <td>
-            {{ value.categories|length }}
-        </td>
-        {% for field, fieldvalue in value.items %}
-            {% if field == "events" %}
-                {% for eventname, score in fieldvalue.items %}
-                <td>{{ eventname }} - {{ score }}</td>
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-    </tr>
-    {% endfor %}
+    </tbody>
 </table>
 
 {% endblock %}
