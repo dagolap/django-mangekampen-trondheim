@@ -7,6 +7,8 @@ from collections import OrderedDict
 from django.db import models
 from django.contrib.auth.models import User
 
+from filebrowser.fields import FileBrowseField
+
 class Season(models.Model):
     startDate = models.DateField()
     endDate = models.DateField()
@@ -109,6 +111,7 @@ class Event(models.Model):
     finished = models.BooleanField()
     season = models.ForeignKey(Season)
     category = models.IntegerField(choices=CATEGORY_CHOICES)
+    image = FileBrowseField("Image", max_length=200, directory="images/", extensions=[".jpg",".jpeg",".png",".gif"], blank=True, null=True)
 
     def __unicode__(self):
         return "{0} - {1}".format(self.name, self.season)
