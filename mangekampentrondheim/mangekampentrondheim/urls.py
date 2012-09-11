@@ -3,7 +3,10 @@ from django.contrib import admin
 from django.conf import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
+from registration.views import register as registration_register
 from filebrowser.sites import site
+
+from mangekamp.forms import MangekampRegistrationForm
 
 admin.autodiscover()
 
@@ -20,6 +23,12 @@ urlpatterns = patterns('',
 
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^accounts/register/', registration_register, 
+        {
+            'backend':'registration.backends.default.DefaultBackend',
+            'form_class':MangekampRegistrationForm
+        },
+        name='registration_register'),
     url(r'^accounts/', include('registration.urls')),
 )
 
