@@ -3,7 +3,7 @@
 {% block scripts %}
 <script>
     $(document).ready(function() {
-        $("#scoreboard").load("/scoreboard/{{ current_season.id}}");
+        $("#scoreboard").load("/activity_board/{{ current_season.id}}");
     });
 
     $(".results_btn").click(function() {
@@ -94,7 +94,10 @@
           <h1>Neste events</h1>
           <div class="row-fluid">
             {% for event in future_events|slice:":3" %}
-            <div class="span4">
+            <div class="span1">
+                <img src="{{ event.image.url }}"></img>
+            </div>
+            <div class="span3">
               <h2>{{ event.name }}</h2>
               <p>
                     <b>Tid:</b> {{ event.time }}<br />
@@ -115,8 +118,14 @@
           <h1>Forrige events</h1>
           <div class="row-fluid">
             {% for event in past_events|slice:":3" %}
-            <div class="span4">
+            <div class="span1">
+                <img src="{{ event.image.url }}"></img>
+            </div>
+            <div class="span3">
               <h2>{{ event.name }}</h2>
+            <div class="span1">
+                <img src="{{ event.image.url }}"></img>
+            </div>
               <p>
                     <b>Tid:</b> {{ event.time }}<br />
                     <b>Sted:</b> <a href="{{event.location_url}}">{{event.location}}</a><br />

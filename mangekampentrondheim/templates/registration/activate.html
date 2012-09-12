@@ -1,0 +1,10 @@
+{% extends "registration/registration_base.html" %}
+{% block title %}{% if account %}Din konto er aktivert!{% else %}Problem med aktivering{% endif %}{% endblock %}
+{% block content %}
+{% if account %}
+Din konto {{ account }} er nå aktivert!  Du kan <a href='{% url auth_login %}'>logge inn</a> ved å bruke passordet du registrerte når du opprettet kontoen din.
+{% else %}
+Aktiveringsnøkelen var ble ikke godkjent. Er du sikker på at URLen du besøkte stemmer? Husk også at fristen for å aktivere en konto fra opprettelse er 7 dager.
+{% endif %}
+{% endblock %}
+

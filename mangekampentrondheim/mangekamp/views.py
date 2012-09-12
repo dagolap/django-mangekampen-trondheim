@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -16,7 +18,7 @@ def home(request):
         future_events = current_season.get_future_events()
         past_events = current_season.get_past_events()
 
-    current_season.get_scoreboard()
+    current_season.scoreboard()
 
     context = {
             'future_events':future_events,
@@ -72,10 +74,26 @@ def results_modal(request, event_id):
     return render(request, 'mangekamp/results_modal.html', context)
 
 @login_required
+def activity_board(request, season_id):
+    season = get_object_or_404(Season, id=season_id)
+    context = {'scores':season.get_activity_board(), 'season_id':season.id}
+    return render(request, 'mangekamp/activity_board.html', context)
+
+@login_required
 def scoreboard(request, season_id):
     season = get_object_or_404(Season, id=season_id)
-    context = {'scores':season.get_scoreboard()}
-    return render(request, 'mangekamp/scoreboard.html', context)
+    context = {}
+
+    context['users'] = season.scoreboard()
+    context['season'] = season
+    grouped_events = season.scoreboard_events()
+    flattened_events = []
+    for group in grouped_events:
+        for event in group:
+            flattened_events.append(event)
+    context['events'] = flattened_events
+
+    return render(request, 'mangekamp/full_scoreboard.html', context)
 
 @login_required
 def event_listing(request, season):
@@ -90,7 +108,24 @@ def event_listing(request, season):
             }
             
     
-    return render(request, 'mangekamp/eventlisting.html', {'previous_events':previous_events, 'future_events':future_events})
+    return render(request, 'mangekamp/eventlisting.html', {'previous_events':past_events, 'future_events':future_events})
+
+@login_required
+def scoreboard_excel(request, season_id):
+    import xlwt
+    current_season = Season.get_current_season()
+    scoreboard = current_season.scoreboard()
+    print scoreboard
+
+    response = HttpResponse(mimetype="application/ms-excel")
+    response['Content-Disposition'] = 'attachment; filename=scoreboard.xls'
+    
+    doc = xlwt.Workbook()
+    sheet = doc.add_sheet('Alle')
+    sheet.write(0,0,'test test test')
+    
+    doc.save(response)
+    return response
 
 @login_required
 def events_listing(request):

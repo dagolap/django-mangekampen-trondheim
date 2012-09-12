@@ -22,7 +22,7 @@ DATABASES = {
 
 ################
 
-LOGIN_URL = "/login"
+LOGIN_URL = "/accounts/login/"
 
 TEMPLATE_CONTEXT_PROCESSORS = (
    'django.core.context_processors.request',
@@ -50,6 +50,15 @@ LANGUAGE_CODE = 'nb-no'
 
 SITE_ID = 1
 
+
+# Registration settings
+ACCOUNT_ACTIVATION_DAYS=7
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_PORT=587
+EMAIL_HOST_USER='Capgemini.Trondheim.MK@gmail.com'
+EMAIL_HOST_PASSWORD='Aevie0up'
+EMAIL_USE_TLS=True
+
 # If you set this to False, Django will make some optimizations so as not
 # to load the internationalization machinery.
 USE_I18N = False
@@ -63,18 +72,23 @@ USE_TZ = False
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = ''
+MEDIA_ROOT = 'media/'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = ''
+MEDIA_URL = '/media/'
+
+# Filebrowser-settings
+FILEBROWSER_MEDIA_ROOT = MEDIA_ROOT
+FILEBROWSER_MEDIA_URL = MEDIA_URL
+FILEBROWSER_DIRECTORY = 'filebrowser/' # Relative to media root
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = 'collected_static'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -135,11 +149,12 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Uncomment the next line to enable the admin:
+    'grappelli',
+    'filebrowser',
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
     'south',
+    'registration',
     'mangekamp',
 )
 

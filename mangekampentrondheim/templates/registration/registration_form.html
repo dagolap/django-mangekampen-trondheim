@@ -1,0 +1,10 @@
+{% extends "registration/registration_base.html" %}
+{% block title %}Opprett konto{% endblock %}
+{% block content %}
+<table>
+    <form method='post' action=''>{% csrf_token %}
+        {{ form }}
+        <tr><td></td><td><input type="submit" value="Send aktiveringsinstruksjoner" class="btn btn-default" /></td>
+    </form>
+</table>
+{% endblock %}
