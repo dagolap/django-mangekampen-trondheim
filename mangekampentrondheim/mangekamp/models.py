@@ -82,8 +82,8 @@ class Season(models.Model):
                 for user in active_users:
                     stat_dict[user]['events'][event.name] = 0
 
-                for score in Score.objects.filter(participation__event=event):
-                    participant = score.participation.participant
+                for score in Participation.objects.filter(event=event):
+                    participant = score.participant
                     stat_dict[participant]['events'][event.name] = score.score
                     stat_dict[participant]['attendance'] += 1
                     if not event.category in stat_dict[participant]['categories']:
@@ -117,7 +117,7 @@ class Event(models.Model):
         return "{0} - {1}".format(self.name, self.season)
     
     def get_scores(self):
-        return Score.objects.filter(participation__event=self).order_by('score')
+        return Participation.objects.filter(participation__event=self).order_by('score')
 
     @property
     def participants(self):
@@ -127,13 +127,7 @@ class Event(models.Model):
 class Participation(models.Model):
     event = models.ForeignKey(Event)
     participant = models.ForeignKey(User)
+    score = models.IntegerField(null=True)
 
     def __unicode__(self):
         return "{0} ({1}) - {2}".format(self.event.name, self.event.season.title, self.participant)
-
-class Score(models.Model):
-    participation = models.ForeignKey(Participation)
-    score = models.IntegerField()
-
-    def __unicode__(self):
-        return "{0}: {1} ({2})".format(self.participation.participant, self.score, self.participation.event)
