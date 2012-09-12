@@ -98,24 +98,6 @@ def scoreboard(request, season_id=None):
 
     return render(request, 'mangekamp/full_scoreboard.html', context)
 
-@login_required
-def event_listing(request, season_id=None):
-    if season_id:
-        current_season = get_object_or_404(Season, id=season_id)
-    else:
-        season = Season.get_current_season()
-    current_season = Season.get_current_season()
-    past_events = current_season.get_past_events()
-    future_events = current_season.get_future_events()
-
-    context = {
-            'future_events':future_events,
-            'past_events':past_events,
-            'current_season':current_season
-            }
-            
-    
-    return render(request, 'mangekamp/eventlisting.html', {'previous_events':past_events, 'future_events':future_events})
 
 @login_required
 def scoreboard_excel(request, season_id):
@@ -134,8 +116,14 @@ def scoreboard_excel(request, season_id):
     doc.save(response)
     return response
 
+
 @login_required
-def events_listing(request):
+def events_listing(request, season_id=None):
+    if season_id:
+        current_season = get_object_or_404(Season, id=season_id)
+    else:
+        current_season = Season.get_current_season()
+
     current_season = Season.get_current_season()
     past_events = current_season.get_past_events()
     future_events = current_season.get_future_events()

@@ -40,11 +40,10 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#">Mangekampen</a>
+          <a class="brand" href="{% url home %}">Mangekampen</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li><a href="{% url home %}">Hovedsiden</a></li>
-              <li><a href="{% url event_listing %}">Alle Events</a></li>
+              <li><a href="{% url events_listing %}">Alle Events</a></li>
               <li><a href="{% url scoreboard %}">Scoreboard</a></li>
             </ul>
             {% if user.is_authenticated %}

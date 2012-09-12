@@ -11,18 +11,16 @@ from mangekamp.forms import MangekampRegistrationForm
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'mangekampentrondheim.views.home', name='home'),
-    # url(r'^mangekampentrondheim/', include('mangekampentrondheim.foo.urls')),
     url(r'^', include('mangekamp.urls')),
     url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/filebrowser/', include(site.urls)),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
 
-    # Uncomment the next line to enable the admin:
+    # TODO: Admin site
+    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
+
+    # Django-registration app, with custom form for signup
     url(r'^accounts/register/', registration_register, 
         {
             'backend':'registration.backends.default.DefaultBackend',
@@ -32,7 +30,7 @@ urlpatterns = patterns('',
     url(r'^accounts/', include('registration.urls')),
 )
 
-
+# Custom static media serving when running in debug mode
 if settings.DEBUG:
     urlpatterns += staticfiles_urlpatterns()
 
