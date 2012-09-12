@@ -26,5 +26,9 @@ class MangekampRegistrationForm(RegistrationForm):
             return self.cleaned_data['email']
 
 class UserProfileForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.fields['alternative_email'].required = False
+
     class Meta:
         model = UserProfile
