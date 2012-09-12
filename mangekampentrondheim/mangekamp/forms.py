@@ -4,6 +4,8 @@ from django.utils.translation import ugettext_lazy as _
 
 from registration.forms import RegistrationForm
 
+from mangekamp.models import UserProfile
+
 class MangekampRegistrationForm(RegistrationForm):
     """
     Subclass of django-registration RegistrationForm which enforces
@@ -22,3 +24,7 @@ class MangekampRegistrationForm(RegistrationForm):
             raise forms.ValidationError(_("Eposten er ikke fra en gyldig organisasjon"))
         else:
             return self.cleaned_data['email']
+
+class UserProfileForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile

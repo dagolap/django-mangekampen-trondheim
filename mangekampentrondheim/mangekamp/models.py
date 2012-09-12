@@ -5,16 +5,35 @@ from itertools import chain, groupby
 from collections import OrderedDict
 
 from django.db import models
+from django.db.models.signals import post_save
 from django.contrib.auth.models import User
 
 from filebrowser.fields import FileBrowseField
 
+class UserProfile(models.Model):
+    GENDER_CHOICES = (
+            (1, "Mann"),
+            (2, "Kvinne"),
+        )
+
+    user = models.OneToOneField(User, editable=False)
+
+    gender = models.IntegerField("kjønn", choices=GENDER_CHOICES, default=1)
+    alternative_email = models.EmailField("alternativ epost", null=True)
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user=instance)
+
+post_save.connect(create_user_profile, sender=User)
+
+
 class Season(models.Model):
-    startDate = models.DateField()
-    endDate = models.DateField()
-    title = models.CharField(max_length=50)
-    required_categories = models.IntegerField(default=3)
-    required_events = models.IntegerField(default=7)
+    startDate = models.DateField("startdato")
+    endDate = models.DateField("sluttdato")
+    title = models.CharField("tittel", max_length=50)
+    required_categories = models.IntegerField("kategorikrav", default=3)
+    required_events = models.IntegerField("arrangementskrav", default=7)
 
     def __unicode__(self):
         return "{0} / {1} - {2}".format(self.startDate.year, self.endDate.year, self.title)
@@ -93,10 +112,6 @@ class Season(models.Model):
 
         return stat_dict
         
-        
-
-
-
 
 class Event(models.Model):
     CATEGORY_CHOICES = (
@@ -105,15 +120,15 @@ class Event(models.Model):
             (3, "Ball")
         )
 
-    name = models.CharField(max_length=50)
-    description = models.TextField()
-    time = models.DateTimeField()
-    location = models.CharField(max_length=100)
-    location_url = models.URLField(max_length=500)
-    finished = models.BooleanField()
+    name = models.CharField("navn", max_length=50)
+    description = models.TextField("beskrivelse", null=True)
+    time = models.DateTimeField("tid")
+    location = models.CharField("sted", null=True, max_length=100)
+    location_url = models.URLField("link til kart", null=True, max_length=500)
+    finished = models.BooleanField("ferdig")
     season = models.ForeignKey(Season)
-    category = models.IntegerField(choices=CATEGORY_CHOICES)
-    image = FileBrowseField("Image", max_length=200, directory="images/", extensions=[".jpg",".jpeg",".png",".gif"], blank=True, null=True)
+    category = models.IntegerField("kategori", choices=CATEGORY_CHOICES)
+    image = FileBrowseField("bilde", max_length=200, directory="images/", extensions=[".jpg",".jpeg",".png",".gif"], blank=True, null=True)
 
     def __unicode__(self):
         return "{0} - {1}".format(self.name, self.season)
@@ -129,7 +144,7 @@ class Event(models.Model):
 class Participation(models.Model):
     event = models.ForeignKey(Event)
     participant = models.ForeignKey(User)
-    score = models.IntegerField(null=True)
+    score = models.IntegerField("score", null=True)
 
     def __unicode__(self):
         return "{0} ({1}) - {2}".format(self.event.name, self.event.season.title, self.participant)

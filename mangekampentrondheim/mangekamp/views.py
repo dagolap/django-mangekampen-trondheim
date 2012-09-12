@@ -5,8 +5,11 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate, login
+from django.contrib import messages
+
 
 from mangekamp.models import Season, Event, Participation
+from mangekamp.forms import UserProfileForm
 
 @login_required
 def home(request):
@@ -131,3 +134,15 @@ def events_listing(request, season_id=None):
                'future_events':future_events
               }
     return render(request, 'mangekamp/events_listing.html', context)  
+
+@login_required
+def userprofile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=request.user.userprofile)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.SUCCESS, "Din brukerprofil er oppdatert")
+        return render(request, 'mangekamp/userprofile.html', {'form':form})
+    else:
+        form = UserProfileForm(instance=request.user.userprofile)
+        return render(request, 'mangekamp/userprofile.html', {'form':form})

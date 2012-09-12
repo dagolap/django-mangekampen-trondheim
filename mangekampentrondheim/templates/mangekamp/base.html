@@ -58,6 +58,7 @@
                     <b class="caret"></b> 
                 </a>
                 <ul class="dropdown-menu" role="menu">
+                    <li><a href="{% url userprofile %}">Brukerprofil</a></li>
                     <li><a href="{% url auth_password_change %}">Skift passord</a></li>
                     {% if user.is_superuser %}
                     <li class="divider"></li>
