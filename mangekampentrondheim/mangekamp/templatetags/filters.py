@@ -13,7 +13,7 @@ def to_mangekjemper_status(season, values):
     future_categories = set([e.category for e in future_events])
     for c in values['categories']:
         if c not in future_categories:
-            future_categories += c
+            future_categories.add(c)
 
     if values['attendance'] >= required_events and values['categories'] >= required_categories:
         return '<img src="/static/img/mangekjemper_done.png" style="width:50px; height:50px;"></img>'
