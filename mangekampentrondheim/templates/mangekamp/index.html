@@ -19,7 +19,7 @@
             loading.hide();
         });
     });
-
+    
     $(".signup_btn").click(function() {
         var clicked_button = $(this);
         var event_id = $(this).attr('id').split("_")[1];
@@ -93,7 +93,7 @@
       </div>
           <h1>Neste events</h1>
           <div class="row-fluid">
-            {% for event in future_events %}
+            {% for event in future_events|slice:":3" %}
             <div class="span1">
                 <img src="{{ event.image.url }}"></img>
             </div>
@@ -114,9 +114,10 @@
             </div><!--/span-->
             {% endfor %}
           </div><!--/row-->
+          <p><a class="btn btn-block events_listing" href="{% url events_listing %}#future">Se alle kommende events</a></p>
           <h1>Forrige events</h1>
           <div class="row-fluid">
-            {% for event in past_events %}
+            {% for event in past_events|slice:":3" %}
             <div class="span1">
                 <img src="{{ event.image.url }}"></img>
             </div>
@@ -136,6 +137,7 @@
             </div><!--/span-->
             {% endfor %}
           </div><!--/row-->
+          <p><a class="btn btn-block" href="{% url events_listing %}#past">Se alle tidligere events</a></p>
         </div><!--/span-->
       </div><!--/row-->
 {% endblock %}

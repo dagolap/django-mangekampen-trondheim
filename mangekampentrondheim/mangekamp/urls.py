@@ -11,5 +11,4 @@ urlpatterns = patterns('mangekamp.views',
     url(r'^event_listing/(?P<season_id>\d+)/$', 'event_listing', name='event_listing'),
     url(r'^event_listing/$', 'event_listing', name='event_listing'),
     url(r'^scoreboard/excel/(?P<season_id>\d+)/$', 'scoreboard_excel', name='scoreboard_excel'),
-)
-
+    url(r'^events_listing/$', 'events_listing', name='events_listing'),

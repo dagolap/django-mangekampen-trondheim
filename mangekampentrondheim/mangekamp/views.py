@@ -132,5 +132,14 @@ def scoreboard_excel(request, season_id):
     sheet.write(0,0,'test test test')
     
     doc.save(response)
-
     return response
+
+@login_required
+def events_listing(request):
+    current_season = Season.get_current_season()
+    past_events = current_season.get_past_events()
+    future_events = current_season.get_future_events()
+    context = {'past_events':past_events,
+               'future_events':future_events
+              }
+    return render(request, 'mangekamp/events_listing.html', context)  

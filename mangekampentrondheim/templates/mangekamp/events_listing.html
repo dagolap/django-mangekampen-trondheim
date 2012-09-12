@@ -1,0 +1,55 @@
+{% extends "mangekamp/base.html" %}
+{% load filters %}
+{% block scripts %}
+<script>
+  $(".results_btn").click(function() {
+        var btn = $(this);
+        var loading = $("#loading-indicator");
+        var loading_anim_timer = setTimeout(function() {
+            loading.show();
+        }, 100);
+        var event_id = btn.attr('id').split("_")[1];
+        $("#modal_dialog").load("/results/"+event_id, function() {
+            $("#modal_dialog").modal();
+            clearTimeout(loading_anim_timer);
+            loading.hide();
+        });
+    });
+</script>
+{% endblock %}
+{% block content %}
+      <div class="row-fluid">
+         <h1 name="future">Kommende events</h1>
+          <div class="row-fluid">
+           <ul>
+            {% for event in future_events %}
+              <li>
+               <p>
+                <a id="results_{{event.id}}" class="btn btn-block results_btn">
+                  {{ event.name }} ({{ event.get_category_display }}) <br />
+                  {{ event.location}}, {{ event.time}} 
+                </a>
+               </p>
+              </li>
+            {% endfor %}
+           </ul>
+          </div><!--/row-->
+      </div><!--/row-->
+         <h1 name="past">Tidligere events</h1>
+          <div class="row-fluid">
+           <ul>
+            {% for event in past_events %}
+              <li>
+               <p>
+                <a id="results_{{event.id}}" class="btn btn-block results_btn">
+                  {{ event.name }} ({{ event.get_category_display }}) <br />
+                  {{ event.location}}, {{ event.time}} 
+                </a>
+               </p>
+              </li>
+            {% endfor %}
+           </ul>
+          </div><!--/row-->
+      </div><!--/row-->
+{% endblock %}
+
