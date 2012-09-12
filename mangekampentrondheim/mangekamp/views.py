@@ -80,8 +80,11 @@ def activity_board(request, season_id):
     return render(request, 'mangekamp/activity_board.html', context)
 
 @login_required
-def scoreboard(request, season_id):
-    season = get_object_or_404(Season, id=season_id)
+def scoreboard(request, season_id=None):
+    if season_id:
+        season = get_object_or_404(Season, id=season_id)
+    else:
+        season = Season.get_current_season()
     context = {}
 
     context['users'] = season.scoreboard()
@@ -96,7 +99,11 @@ def scoreboard(request, season_id):
     return render(request, 'mangekamp/full_scoreboard.html', context)
 
 @login_required
-def event_listing(request, season):
+def event_listing(request, season_id=None):
+    if season_id:
+        current_season = get_object_or_404(Season, id=season_id)
+    else:
+        season = Season.get_current_season()
     current_season = Season.get_current_season()
     past_events = current_season.get_past_events()
     future_events = current_season.get_future_events()

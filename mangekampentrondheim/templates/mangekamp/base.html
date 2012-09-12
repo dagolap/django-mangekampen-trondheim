@@ -43,10 +43,33 @@
           <a class="brand" href="#">Mangekampen</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
+              <li><a href="{% url home %}">Hovedsiden</a></li>
+              <li><a href="{% url event_listing %}">Alle Events</a></li>
+              <li><a href="{% url scoreboard %}">Scoreboard</a></li>
             </ul>
+            {% if user.is_authenticated %}
+            <ul class="pull-right nav nav-collapse collapse">
+                <li class="dropdown">
+                <a role="button" class="dropdown-toggle" data-toggle="dropdown">
+                    {% if user.get_full_name %}
+                        {{ user.get_full_name }}
+                    {% else %}
+                        {{ user }}
+                    {% endif %}
+                    <b class="caret"></b> 
+                </a>
+                <ul class="dropdown-menu" role="menu">
+                    <li><a href="{% url auth_password_change %}">Skift passord</a></li>
+                    {% if user.is_superuser %}
+                    <li class="divider"></li>
+                    <li><a href="{% url admin:index %}">Administrasjon</a></li>
+                    {% endif %}
+                    <li class="divider"></li>
+                    <li><a href="{% url auth_logout %}">Logg ut</a></li>
+                <ul>
+                </li>
+            </ul>
+            {% endif %}
           </div><!--/.nav-collapse -->
         </div>
       </div>

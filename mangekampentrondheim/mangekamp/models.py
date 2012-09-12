@@ -82,6 +82,8 @@ class Season(models.Model):
                 for user in active_users:
                     stat_dict[user]['events'][event.name] = 0
 
+                # TODO: The use of 'score' here, when we switched to Participation is really confusing
+                # Refactor.
                 for score in Participation.objects.filter(event=event):
                     participant = score.participant
                     stat_dict[participant]['events'][event.name] = score.score
