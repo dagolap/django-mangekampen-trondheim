@@ -70,7 +70,7 @@ def results_modal(request, event_id):
     event = get_object_or_404(Event, id=event_id)
     scores = event.get_scores()
     
-    context = {'scores':scores}
+    context = {'scores':scores, 'event_name':event.name}
     return render(request, 'mangekamp/results_modal.html', context)
 
 @login_required
