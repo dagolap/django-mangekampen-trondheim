@@ -21,6 +21,16 @@ class UserProfile(models.Model):
     gender = models.IntegerField("kjønn", choices=GENDER_CHOICES, default=1)
     alternative_email = models.EmailField("alternativ epost", null=True)
 
+    def is_mangekjemper(self, season_id):
+        season = Season.objects.get(id=season_id)
+        all_participations = Participation.objects.filter(event__season__id=season_id, participant=self.user)
+        num_events = all_participations.count()
+        num_categories = len(set([p.event.category for p in all_participations]))
+
+        print num_events
+        print num_categories
+        return num_events >= season.required_events and num_categories >= season.required_categories
+
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
@@ -86,6 +96,19 @@ class Season(models.Model):
 
         return sorted_events
 
+    def get_user_scores(self, season_id):
+        for up in UserProfile.objects.filter():
+            print "{0} - {1}".format(up.user.username, up.is_mangekjemper(season_id))
+        scores = {}
+        participations = Participation.objects.filter(event__season__id=season_id).order_by('participant')
+#        for p in participations:
+#            if scores[p.participant.username]['events']:
+#                scores[p.participant.username]['events'] += 1
+#            else: 
+#                scores[p.participant.username]['events'] = 1
+
+        print participations
+
     def scoreboard(self):
         active_users = User.objects.filter(is_active=True)
         sorted_events = self.scoreboard_events()
@@ -99,13 +122,12 @@ class Season(models.Model):
         for group in sorted_events:
             for event in group:
                 for user in active_users:
-                    stat_dict[user]['events'][event.name] = 0
+                    stat_dict[user]['events'][event.name] = (0, event.category)
 
-                # TODO: The use of 'score' here, when we switched to Participation is really confusing
                 # Refactor.
-                for score in Participation.objects.filter(event=event):
-                    participant = score.participant
-                    stat_dict[participant]['events'][event.name] = score.score
+                for participation in Participation.objects.filter(event=event):
+                    participant = participation.participant
+                    stat_dict[participant]['events'][event.name] = (participation.score, event.category)
                     stat_dict[participant]['attendance'] += 1
                     if not event.category in stat_dict[participant]['categories']:
                         stat_dict[participant]['categories'].append(event.category)

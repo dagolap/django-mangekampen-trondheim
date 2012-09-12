@@ -23,6 +23,8 @@ def home(request):
 
     current_season.scoreboard()
 
+    current_season.get_user_scores(current_season.id)
+
     context = {
             'future_events':future_events,
             'past_events':past_events,

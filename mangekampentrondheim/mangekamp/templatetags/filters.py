@@ -21,3 +21,10 @@ def to_mangekjemper_status(season, values):
         return '<img src="/static/img/mangekjemper_yes.png" style="width:50px; height:50px;"></img>'
     else:
         return '<img src="/static/img/mangekjemper_no.png" style="width:50px; height:50px;"></img>'
+
+@register.filter("category_to_style")
+def category_to_style(category):
+    if category == 1: return "background-color:#FF668C;"
+    if category == 2: return "background-color:#C6FFB3;"
+    if category == 3: return "background-color:#809FFF;"
+    return ""

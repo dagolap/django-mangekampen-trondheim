@@ -9,6 +9,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+INTERNAL_IPS=('192.168.56.1')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -126,6 +128,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -155,6 +158,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'south',
     'registration',
+    'debug_toolbar',
     'mangekamp',
 )
 

@@ -53,7 +53,7 @@
             {% for field, fieldvalue in value.items %}
                 {% if field == "events" %}
                     {% for eventname, score in fieldvalue.items %}
-                    <td>{{ score }}</td>
+                    <td style="{{ score.1|category_to_style }}">{{ score.0 }}</td>
                     {% endfor %}
                 {% endif %}
             {% endfor %}
