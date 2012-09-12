@@ -92,3 +92,12 @@ def event_listing(request, season):
     
     return render(request, 'mangekamp/eventlisting.html', {'previous_events':previous_events, 'future_events':future_events})
 
+@login_required
+def events_listing(request):
+    current_season = Season.get_current_season()
+    past_events = current_season.get_past_events()
+    future_events = current_season.get_future_events()
+    context = {'past_events':past_events,
+               'future_events':future_events
+              }
+    return render(request, 'mangekamp/events_listing.html', context)  
