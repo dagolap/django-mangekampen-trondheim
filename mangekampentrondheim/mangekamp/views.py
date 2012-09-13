@@ -58,18 +58,18 @@ def toggle_signup(request, event_id):
         try:
             for p in participation:
                 p.delete()
-            return HttpResponse('{0}"event_name":"{1}", "signed_up":{2} {3}'.format("{", event.name, "false", "}"))
+            return HttpResponse(u'{0}"event_name":"{1}", "signed_up":{2} {3}'.format("{", event.name, "false", "}"))
         except:
             # TODO: Error message
-            return HttpResponse('{0}"event_name":"{1}", "signed_up":{2} {3}'.format("{", event.name, "true", "}"))
+            return HttpResponse(u'{0}"event_name":"{1}", "signed_up":{2} {3}'.format("{", event.name, "true", "}"))
     else:
         try:
             participation = Participation(event=event, participant=request.user)
             participation.save()
-            return HttpResponse('{0}"event_name":"{1}", "signed_up":{2} {3}'.format("{", event.name, "true", "}"))
+            return HttpResponse(u'{0}"event_name":"{1}", "signed_up":{2} {3}'.format("{", event.name, "true", "}"))
         except:
             # TODO: Error message
-            return HttpResponse('{0}"event_name":"{1}", "signed_up":{2} {3}'.format("{", event.name, "false", "}"))
+            return HttpResponse(u'{0}"event_name":"{1}", "signed_up":{2} {3}'.format("{", event.name, "false", "}"))
 
 @login_required
 def results_modal(request, event_id):
