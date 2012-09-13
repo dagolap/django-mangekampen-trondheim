@@ -104,27 +104,84 @@ def scoreboard(request, season_id=None):
             flattened_events.append(event)
     context['events'] = flattened_events
 
-    print all_users[0]
-    print "-----------------------------"
-    print all_users[1]
-
     return render(request, 'mangekamp/full_scoreboard.html', context)
 
 
 @login_required
 def scoreboard_excel(request, season_id):
     import xlwt
-    current_season = Season.get_current_season()
-    scoreboard = current_season.scoreboard()
-    print scoreboard
+    if season_id:
+        season = get_object_or_404(Season, id=season_id)
+    else:
+        season = Season.get_current_season()
+    scoreboard = season.scoreboard()
 
     response = HttpResponse(mimetype="application/ms-excel")
     response['Content-Disposition'] = 'attachment; filename=scoreboard.xls'
     
     doc = xlwt.Workbook()
     sheet = doc.add_sheet('Alle')
-    sheet.write(0,0,'test test test')
-    
+
+    # Write event headers
+    grouped_events = season.scoreboard_events()
+    flattened_events = []
+    for group in grouped_events:
+        for event in group:
+            flattened_events.append(event)
+
+    champs = scoreboard[0]
+    sheet.write(0, column+1, "Snittscore", styles['header'])
+    non_champs = scoreboard[1]
+    # Set up background color styles
+    styles = {1: xlwt.easyxf(
+        "pattern:fore_colour 2, pattern solid;"
+            ), 
+        2: xlwt.easyxf(
+        "pattern:fore_colour 3, pattern solid;"
+            ),
+        3:xlwt.easyxf(
+        "pattern:fore_colour 4, pattern solid;"
+            ),
+        'overskrift':xlwt.easyxf(
+        "font:bold True; font:height 280;" 
+            ),
+        'header':xlwt.easyxf(
+        "font:bold True;" 
+            ),}
+    # Write headers
+    sheet.write(0, 0, "Bruker", styles['header'])
+    sheet.col(0).width = 6666
+    sheet.write(0, 1, "Snittscore", styles['header'])
+    sheet.col(1).width = 3000
+    sheet.write(0, 2, "Kategorier", styles['header'])
+    sheet.col(2).width = 3000
+    sheet.write(0, 3, "Arrangement", styles['header'])
+    sheet.col(3).width = 4000
+    for column, event in enumerate(flattened_events, start=4):
+        sheet.write(0, column, event.name, styles['header'])
+        sheet.col(column).width = 4000
+
+    # Handle champions
+    sheet.write(1, 0, "Mangekjempere", styles['overskrift'])
+    for i, champ in enumerate(champs, start=2):
+        sheet.write(i, 0, champ[0].get_full_name())
+        sheet.write(i, 1, champ[1]['score'])
+        sheet.write(i, 2, len(champ[1]['categories']))
+        sheet.write(i, 3, champ[1]['attendance'])
+        for column, event in enumerate(champ[1]['events'], start=4):
+            sheet.write(i, column, champ[1]['events'][event][0], styles[champ[1]['events'][event][1]])
+
+    # Handle non-champions
+    sheet.write(i+1, 0, "Resten av deltakerne", styles['overskrift'])
+    for i, champ in enumerate(non_champs, start=i+2):
+        sheet.write(i, 0, champ[0].get_full_name())
+        sheet.write(i, 1, "N/A")
+        sheet.write(i, 2, len(champ[1]['categories']))
+        sheet.write(i, 3, champ[1]['attendance'])
+        for column, event in enumerate(champ[1]['events'], start=4):
+            sheet.write(i, column, champ[1]['events'][event][0], styles[champ[1]['events'][event][1]])
+
+
     doc.save(response)
     return response
 
