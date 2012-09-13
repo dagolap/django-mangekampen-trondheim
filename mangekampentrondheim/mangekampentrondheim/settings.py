@@ -1,7 +1,12 @@
 # Django settings for mangekampentrondheim project.
+from django.contrib.messages import constants as messages
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
+
+DEBUG_TOOLBAR_CONFIG = {
+    'INTERCEPT_REDIRECTS': False,
+}
 
 ADMINS = (
     # ('Your Name', 'your_email@example.com'),
@@ -23,6 +28,12 @@ DATABASES = {
 }
 
 ################
+MESSAGE_TAGS = {messages.DEBUG: 'alert-error',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-info',
+        messages.ERROR: 'alert-error',}
+
 
 LOGIN_URL = "/accounts/login/"
 

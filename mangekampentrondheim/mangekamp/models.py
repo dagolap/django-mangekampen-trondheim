@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import operator
 from datetime import datetime
 from itertools import chain, groupby
 from collections import OrderedDict
@@ -23,13 +24,39 @@ class UserProfile(models.Model):
 
     def is_mangekjemper(self, season_id):
         season = Season.objects.get(id=season_id)
-        all_participations = Participation.objects.filter(event__season__id=season_id, participant=self.user)
+        all_participations = Participation.objects.filter(event__season__id=season_id, participant=self.user, score__isnull=False)
         num_events = all_participations.count()
         num_categories = len(set([p.event.category for p in all_participations]))
 
-        print num_events
-        print num_categories
         return num_events >= season.required_events and num_categories >= season.required_categories
+
+    def get_score(self, season_id):
+        if not self.is_mangekjemper(season_id):
+            return 0;
+
+        participations = Participation.objects.filter(event__season__id=season_id, participant=self.user, score__isnull=False).order_by('event__category', 'score')
+        participations = groupby(participations, lambda p: p.event.category)
+        scores_list = []
+        counting_scores = []
+        for key, group in participations:
+            scores_list.append(list(group))
+       
+        flattened_scores = []
+        for category in scores_list:
+            counting_scores.append(category.pop(0))
+            flattened_scores += category
+
+        flattened_scores.sort(key=lambda p: p.score)
+        season = Season.objects.get(id=season_id)
+        counting_scores += flattened_scores[:season.required_events-len(counting_scores)]
+        counting_scores = [p.score for p in counting_scores]
+
+        return float(reduce(operator.add, counting_scores)) / len(counting_scores)
+
+    def get_eventscores(self):
+        participations = Participation.objects.filter(participant=self.user, event__season=Season.get_current_season())
+        return [(p.event.name, p.score) for p in participations]
+
 
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
@@ -107,7 +134,6 @@ class Season(models.Model):
 #            else: 
 #                scores[p.participant.username]['events'] = 1
 
-        print participations
 
     def scoreboard(self):
         active_users = User.objects.filter(is_active=True)
@@ -118,13 +144,14 @@ class Season(models.Model):
             stat_dict[user]['attendance'] = 0
             stat_dict[user]['categories'] = []
             stat_dict[user]['events'] = OrderedDict()
+            stat_dict[user]['score'] = user.userprofile.get_score(self.id)
 
         for group in sorted_events:
             for event in group:
                 for user in active_users:
                     stat_dict[user]['events'][event.name] = (0, event.category)
 
-                # Refactor.
+                # TODO: Refactor.
                 for participation in Participation.objects.filter(event=event):
                     participant = participation.participant
                     stat_dict[participant]['events'][event.name] = (participation.score, event.category)
@@ -132,7 +159,25 @@ class Season(models.Model):
                     if not event.category in stat_dict[participant]['categories']:
                         stat_dict[participant]['categories'].append(event.category)
 
-        return stat_dict
+        mangekjemper_list = []
+        lazy_people_list = []
+        for user in stat_dict.keys():
+            if stat_dict[user]['score'] == 0:
+                lazy_people_list.append((user, stat_dict[user]))
+            else:
+                mangekjemper_list.append((user, stat_dict[user]))
+
+        mangekjemper_list.sort(key=lambda t: t[1]['score'], reverse=True)
+        lazy_people_list.sort(key=lambda t: len(t[1]['categories']), reverse=True)
+        lazy_people_list = groupby(lazy_people_list, lambda t: len(t[1]['categories']))
+        lazy_people_list_2 = []
+        for key, group in lazy_people_list:
+            sorted_group = sorted(list(group), key=lambda t: t[1]['attendance'], reverse=True)
+            lazy_people_list_2.extend(sorted_group)
+
+        #TODO: FIX ALL THE THINGS
+        return (mangekjemper_list, lazy_people_list_2)
+
         
 
 class Event(models.Model):
@@ -169,4 +214,4 @@ class Participation(models.Model):
     score = models.IntegerField("score", null=True)
 
     def __unicode__(self):
-        return "{0} ({1}) - {2}".format(self.event.name, self.event.season.title, self.participant)
+        return "{0} ({1}) - {2}({3})".format(self.event.name, self.event.season.title, self.participant, self.score)

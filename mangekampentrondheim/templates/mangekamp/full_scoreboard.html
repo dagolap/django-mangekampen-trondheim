@@ -23,12 +23,14 @@
 
 {% block content %}
 
+<h1>Mangekjempere</h1>
 <table class="table table-hover full-scoreboard">
     <thead>
         <tr>
             <th>Navn</th>
-            <th>Arrangementer</th>
+            <th>Snittplassering</th>
             <th>Kategorier</th>
+            <th>Arrangementer</th>
             <th>Status</th>       
             {% for event in events %}
             <th><a class="btn btn-primary results_btn" id="results_{{event.id}}" >{{ event.name }}</a></th>    
@@ -36,29 +38,45 @@
         </tr>
     </thead>
     <tbody>
-        {% for key, value in users.items %}
+        {% for user in users %}
         <tr>
-            <td>
-                {{ key.get_full_name }}
-            </td>
-            <td>
-                {{ value.attendance }} / 7
-            </td>
-            <td>
-                {{ value.categories|length }} / 3
-            </td>
-            <td>
-                {{ season|to_mangekjemper_status:value|safe }}
-            </td>
-            {% for field, fieldvalue in value.items %}
-                {% if field == "events" %}
-                    {% for eventname, score in fieldvalue.items %}
-                    <td style="{{ score.1|category_to_style }}">{{ score.0 }}</td>
-                    {% endfor %}
-                {% endif %}
+            <td>{{ user.0.get_full_name }}</td>
+            <td>{{ user.1.score}}</td>
+            <td>{{ user.1.categories|length }}</td>
+            <td>{{ user.1.attendance }}</td>
+            <td>{{ season|to_mangekjemper_status:user.1|safe }}</td>
+            {% for event, score in user.1.events.items %}
+            <td style="{{ score.1|category_to_style }}">{{ score.0 }}</td>
             {% endfor %}
         </tr>
         {% endfor %}
-    </tbody>
 </table>
+
+<h1>På veien til mangekjemper</h1>
+<table class="table table-hover full-scoreboard">
+    <thead>
+        <tr>
+            <th>Navn</th>
+            <th>Kategorier</th>
+            <th>Arrangementer</th>
+            <th>Status</th>       
+            {% for event in events %}
+            <th><a class="btn btn-primary results_btn" id="results_{{event.id}}" >{{ event.name }}</a></th>    
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in lazy_users %}
+        <tr>
+            <td>{{ user.0.get_full_name }}</td>
+            <td>{{ user.1.categories|length }}</td>
+            <td>{{ user.1.attendance }}</td>
+            <td>{{ season|to_mangekjemper_status:user.1|safe }}</td>
+            {% for event, score in user.1.events.items %}
+            <td style="{{ score.1|category_to_style }}">{{ score.0 }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+</table>
+
 {% endblock %}

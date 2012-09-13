@@ -1,13 +1,38 @@
 {% extends 'base.html' %}
 {% block content %}
-<form action="{% url userprofile %}" method="post">
-    {% csrf_token %}
-    {% for field in form %}
-        <div class="fieldWrapper">
-            {{ field.errors }}
-            {{ field.label_tag }} {{ field }}
-        </div>
-    {% endfor %}
-    <p><input type="submit" value="Oppdater" /></p>
-</form>
+<div class="row-fluid">
+    <div class="span6">
+        <h1>Oppdater profil</h1>
+        <form action="{% url userprofile %}" method="post">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="fieldWrapper">
+                    {{ field.errors }}
+                    {{ field.label_tag }} {{ field }}
+                </div>
+            {% endfor %}
+            <p><input type="submit" class="btn btn-primary" value="Oppdater" /></p>
+        </form>
+    </div>
+    <div class="span3">
+        <h1>Resultater</h1>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Øvelse</th>
+                    <th>Plassering</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for event in events %}
+                    <tr>
+                        <td>{{ event.0 }}</td>
+                        <td>{{ event.1 }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+</div>
 {% endblock %}

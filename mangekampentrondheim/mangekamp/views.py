@@ -24,6 +24,7 @@ def home(request):
     current_season.scoreboard()
 
     current_season.get_user_scores(current_season.id)
+    request.user.userprofile.get_score(current_season.id)
 
     context = {
             'future_events':future_events,
@@ -92,7 +93,9 @@ def scoreboard(request, season_id=None):
         season = Season.get_current_season()
     context = {}
 
-    context['users'] = season.scoreboard()
+    all_users = season.scoreboard()
+    context['users'] = all_users[0]
+    context['lazy_users'] = all_users[1]
     context['season'] = season
     grouped_events = season.scoreboard_events()
     flattened_events = []
@@ -100,6 +103,10 @@ def scoreboard(request, season_id=None):
         for event in group:
             flattened_events.append(event)
     context['events'] = flattened_events
+
+    print all_users[0]
+    print "-----------------------------"
+    print all_users[1]
 
     return render(request, 'mangekamp/full_scoreboard.html', context)
 
@@ -139,12 +146,15 @@ def events_listing(request, season_id=None):
 
 @login_required
 def userprofile(request):
+    context =  {}
+    context['events'] = request.user.userprofile.get_eventscores()
     if request.method == 'POST':
         form = UserProfileForm(request.POST, instance=request.user.userprofile)
+        context['form'] = form
         if form.is_valid():
             form.save()
             messages.add_message(request, messages.SUCCESS, "Din brukerprofil er oppdatert")
-        return render(request, 'mangekamp/userprofile.html', {'form':form})
+        return render(request, 'mangekamp/userprofile.html', context)
     else:
-        form = UserProfileForm(instance=request.user.userprofile)
-        return render(request, 'mangekamp/userprofile.html', {'form':form})
+        context['form'] = UserProfileForm(instance=request.user.userprofile)
+        return render(request, 'mangekamp/userprofile.html', context)
