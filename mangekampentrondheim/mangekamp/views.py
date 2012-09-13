@@ -21,7 +21,11 @@ def home(request):
         future_events = current_season.get_future_events()
         past_events = current_season.get_past_events()
 
-    current_season.scoreboard()
+    if len(future_events) > 3:
+        future_events = future_events[:3]
+    
+    if len(past_events) > 3:
+        past_events = past_events[:3]
 
     current_season.get_user_scores(current_season.id)
     request.user.userprofile.get_score(current_season.id)
@@ -82,7 +86,11 @@ def results_modal(request, event_id):
 @login_required
 def activity_board(request, season_id):
     season = get_object_or_404(Season, id=season_id)
-    context = {'scores':season.get_activity_board(), 'season_id':season.id}
+    activity = season.get_activity_board()
+    if len(activity) > 2:
+        activity = activity[:2]
+
+    context = {'scores':activity, 'season_id':season.id}
     return render(request, 'mangekamp/activity_board.html', context)
 
 @login_required
