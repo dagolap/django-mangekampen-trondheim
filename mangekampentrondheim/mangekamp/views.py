@@ -130,7 +130,6 @@ def scoreboard_excel(request, season_id):
             flattened_events.append(event)
 
     champs = scoreboard[0]
-    sheet.write(0, column+1, "Snittscore", styles['header'])
     non_champs = scoreboard[1]
     # Set up background color styles
     styles = {1: xlwt.easyxf(
