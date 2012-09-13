@@ -73,7 +73,7 @@ class Season(models.Model):
     required_events = models.IntegerField("arrangementskrav", default=7)
 
     def __unicode__(self):
-        return "{0} / {1} - {2}".format(self.startDate.year, self.endDate.year, self.title)
+        return u"{0} / {1} - {2}".format(self.startDate.year, self.endDate.year, self.title)
 
     class Meta:
         verbose_name="sesong"
@@ -202,7 +202,7 @@ class Event(models.Model):
     image = FileBrowseField("bilde", max_length=200, directory="images/", extensions=[".jpg",".jpeg",".png",".gif"], blank=True, null=True)
 
     def __unicode__(self):
-        return "{0} - {1}".format(self.name, self.season)
+        return u"{0} - {1}".format(self.name, self.season)
 
     class Meta:
         verbose_name="arrangement"
@@ -222,7 +222,7 @@ class Participation(models.Model):
     score = models.IntegerField("score", null=True)
 
     def __unicode__(self):
-        return "{0} ({1}) - {2}({3})".format(self.event.name, self.event.season.title, self.participant, self.score)
+        return u"{0} ({1}) - {2}({3})".format(self.event.name, self.event.season.title, self.participant, self.score)
 
     class Meta:
         verbose_name="påmelding"
