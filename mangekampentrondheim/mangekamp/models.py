@@ -75,6 +75,10 @@ class Season(models.Model):
     def __unicode__(self):
         return "{0} / {1} - {2}".format(self.startDate.year, self.endDate.year, self.title)
 
+    class Meta:
+        verbose_name="sesong"
+        verbose_name_plural="sesonger"
+
     @staticmethod
     def get_current_season():
         active_seasons = Season.objects.filter(startDate__lte=datetime.today(), endDate__gte=datetime.today())
@@ -193,12 +197,16 @@ class Event(models.Model):
     location = models.CharField("sted", null=True, max_length=100)
     location_url = models.URLField("link til kart", null=True, max_length=500)
     finished = models.BooleanField("ferdig")
-    season = models.ForeignKey(Season)
+    season = models.ForeignKey(Season, verbose_name="sesong")
     category = models.IntegerField("kategori", choices=CATEGORY_CHOICES)
     image = FileBrowseField("bilde", max_length=200, directory="images/", extensions=[".jpg",".jpeg",".png",".gif"], blank=True, null=True)
 
     def __unicode__(self):
         return "{0} - {1}".format(self.name, self.season)
+
+    class Meta:
+        verbose_name="arrangement"
+        verbose_name_plural="arrangement"
     
     def get_scores(self):
         return Participation.objects.filter(event=self).order_by('score')
@@ -209,9 +217,13 @@ class Event(models.Model):
 
 
 class Participation(models.Model):
-    event = models.ForeignKey(Event)
-    participant = models.ForeignKey(User)
+    event = models.ForeignKey(Event, verbose_name="arrangement")
+    participant = models.ForeignKey(User, verbose_name="deltaker")
     score = models.IntegerField("score", null=True)
 
     def __unicode__(self):
         return "{0} ({1}) - {2}({3})".format(self.event.name, self.event.season.title, self.participant, self.score)
+
+    class Meta:
+        verbose_name="påmelding"
+        verbose_name_plural="påmeldinger"

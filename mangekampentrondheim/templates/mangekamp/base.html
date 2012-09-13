@@ -60,7 +60,7 @@
                 <ul class="dropdown-menu" role="menu">
                     <li><a href="{% url userprofile %}">Brukerprofil</a></li>
                     <li><a href="{% url auth_password_change %}">Skift passord</a></li>
-                    {% if user.is_superuser %}
+                    {% if user.is_staff %}
                     <li class="divider"></li>
                     <li><a href="{% url admin:index %}">Administrasjon</a></li>
                     {% endif %}
