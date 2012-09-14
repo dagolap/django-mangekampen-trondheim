@@ -27,7 +27,6 @@ def home(request):
     if len(past_events) > 3:
         past_events = past_events[:3]
 
-    current_season.get_user_scores(current_season.id)
     request.user.userprofile.get_score(current_season.id)
 
     context = {
