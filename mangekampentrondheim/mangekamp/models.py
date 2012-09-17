@@ -127,8 +127,11 @@ class Season(models.Model):
 
         return sorted_events
 
-    def scoreboard(self):
-        active_users = User.objects.filter(is_active=True)
+    def scoreboard(self, gender):
+        if gender != "all":
+            active_users = User.objects.filter(is_active=True, userprofile__gender=gender)
+        else:
+            active_users = User.objects.filter(is_active=True)
         sorted_events = self.scoreboard_events()
         stat_dict = {}
         for user in active_users:
@@ -146,10 +149,11 @@ class Season(models.Model):
                 # TODO: Refactor.
                 for participation in Participation.objects.filter(event=event, score__isnull=False):
                     participant = participation.participant
-                    stat_dict[participant]['events'][event.name] = (participation.score, event.category)
-                    stat_dict[participant]['attendance'] += 1
-                    if not event.category in stat_dict[participant]['categories']:
-                        stat_dict[participant]['categories'].append(event.category)
+                    if participant in active_users:
+                        stat_dict[participant]['events'][event.name] = (participation.score, event.category)
+                        stat_dict[participant]['attendance'] += 1
+                        if not event.category in stat_dict[participant]['categories']:
+                            stat_dict[participant]['categories'].append(event.category)
 
         mangekjemper_list = []
         lazy_people_list = []
@@ -188,6 +192,7 @@ class Event(models.Model):
     season = models.ForeignKey(Season, verbose_name="sesong")
     category = models.IntegerField("kategori", choices=CATEGORY_CHOICES)
     image = FileBrowseField("bilde", max_length=200, directory="images/", extensions=[".jpg",".jpeg",".png",".gif"], blank=True, null=True)
+    administrator = models.ForeignKey(User, verbose_name="ansvarlig")
 
     def __unicode__(self):
         return u"{0} - {1}".format(self.name, self.season)

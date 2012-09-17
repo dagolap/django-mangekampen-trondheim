@@ -28,3 +28,10 @@ def category_to_style(category):
     if category == 2: return "background-color:#C6FFB3;"
     if category == 3: return "background-color:#809FFF;"
     return ""
+
+@register.filter("category_tag")
+def category_tag(category):
+    if category == 1: return '&nbsp;&nbsp;<span class="label label-important">T</span>'
+    if category == 2: return '&nbsp;&nbsp;<span class="label label-success">U</span>'
+    if category == 3: return '&nbsp;&nbsp;<span class="label label-info">B</span>'
+    return ""

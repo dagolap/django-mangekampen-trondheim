@@ -17,24 +17,50 @@
         });
     });
 
+    $(".gender-toggle").click(function() {
+        var gender = $(this).attr('id');
+        var loading = $("#loading-indicator");
+        var loading_anim_timer = setTimeout(function() {
+            loading.show();
+        }, 100);
+        $("#scoreboard-contents").load("/scoreboard/1/"+gender+" #scoreboard-contents", function() {
+                clearTimeout(loading_anim_timer);
+                loading.hide();
+        });
+    });
+
 </script>
 
 {% endblock %}
 
 {% block content %}
 
-<h1>Mangekjempere</h1>
-<table class="table table-hover full-scoreboard">
+<div class="row-fluid">
+    <div class="span3 pull-right">
+        <div class="btn-group pull-right" data-toggle="buttons-radio">
+            <button id="all" type="button" class="gender-toggle btn btn-primary active">Alle</button>
+            <button id="male" type="button" class="gender-toggle btn btn-primary">Menn</button>
+            <button id="female" type="button" class="gender-toggle btn btn-primary">Kvinner</button>
+        </div>
+    </div>
+</div>
+<div id="scoreboard-contents">
+<table class="table table-hover full-scoreboard" style="margin-top: 200px">
     <thead>
-        <tr>
-            <th>Navn</th>
-            <th>Snittplassering</th>
-            <th>Kategorier</th>
-            <th>Arrangementer</th>
-            <th>Status</th>       
+        <tr style="height:30px;">
+            <th style="vertical-align: top;"><div style="position: absolute; -webkit-transform:rotate(-90deg); -webkit-transform-origin:0% 50%;">Navn</div></th>
+            <th style="vertical-align: top;"><div style="position: absolute; -webkit-transform:rotate(-90deg); -webkit-transform-origin:0% 50%;" >Snittplassering</div></th>
+            <th style="vertical-align: top;"><div style="position: absolute; -webkit-transform:rotate(-90deg); -webkit-transform-origin:0% 50%;">Kategorier</div></th>
+            <th style="vertical-align: top;"><div style="position: absolute; -webkit-transform:rotate(-90deg); -webkit-transform-origin:0% 50%;" >Arrangementer</div></th>
+            <th style="vertical-align: top;"><div style="position: absolute; -webkit-transform:rotate(-90deg); -webkit-transform-origin:0% 50%;">Status</div></th>       
             {% for event in events %}
-            <th><a class="btn btn-primary results_btn" id="results_{{event.id}}" >{{ event.name }}</a></th>    
+            <th style="vertical-align: top;"><div style="position: absolute; -webkit-transform:rotate(-90deg); -webkit-transform-origin:0% 50%;"> <a  class="results_btn scoreboard-event-title"id="results_{{event.id}}" >{{ event.name }}</a>{{event.category|category_tag|safe}}</div></th>    
             {% endfor %}
+        </tr>
+        <tr>
+        <td colspan="100%"> 
+            <h1>Mangekjempere</h1>
+        </td>
         </tr>
     </thead>
     <tbody>
@@ -46,37 +72,30 @@
             <td>{{ user.1.attendance }}</td>
             <td>{{ season|to_mangekjemper_status:user.1|safe }}</td>
             {% for event, score in user.1.events.items %}
-            <td style="{{ score.1|category_to_style }}">{{ score.0 }}</td>
+            <td>{{ score.0 }}</td>
             {% endfor %}
         </tr>
         {% endfor %}
-</table>
-
-<h1>På veien til mangekjemper</h1>
-<table class="table table-hover full-scoreboard">
+    </tbody>
     <thead>
         <tr>
-            <th>Navn</th>
-            <th>Kategorier</th>
-            <th>Arrangementer</th>
-            <th>Status</th>       
-            {% for event in events %}
-            <th><a class="btn btn-primary results_btn" id="results_{{event.id}}" >{{ event.name }}</a></th>    
-            {% endfor %}
+            <td colspan="100%"><h1>På veien til mangekjemper</h1></td>
         </tr>
     </thead>
     <tbody>
         {% for user in lazy_users %}
         <tr>
             <td>{{ user.0.get_full_name }}</td>
+            <td>N/A</td>
             <td>{{ user.1.categories|length }}</td>
             <td>{{ user.1.attendance }}</td>
             <td>{{ season|to_mangekjemper_status:user.1|safe }}</td>
             {% for event, score in user.1.events.items %}
-            <td style="{{ score.1|category_to_style }}">{{ score.0 }}</td>
+            <td>{{ score.0 }}</td>
             {% endfor %}
         </tr>
         {% endfor %}
 </table>
+</div>
 
 {% endblock %}

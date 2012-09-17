@@ -6,10 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-
+from django.core.mail import send_mail
+from django.core.urlresolvers import reverse
 
 from mangekamp.models import Season, Event, Participation
-from mangekamp.forms import UserProfileForm
+from mangekamp.forms import UserProfileForm, EmailEventForm
 
 @login_required
 def home(request):
@@ -26,8 +27,6 @@ def home(request):
     
     if len(past_events) > 3:
         past_events = past_events[:3]
-
-    request.user.userprofile.get_score(current_season.id)
 
     context = {
             'future_events':future_events,
@@ -93,17 +92,24 @@ def activity_board(request, season_id):
     return render(request, 'mangekamp/activity_board.html', context)
 
 @login_required
-def scoreboard(request, season_id=None):
-    if season_id:
-        season = get_object_or_404(Season, id=season_id)
-    else:
-        season = Season.get_current_season()
+def scoreboard(request, season_id=None, gender="all"):
     context = {}
+    if season_id:
+        context['season'] = season = get_object_or_404(Season, id=season_id)
+    else:
+        context['season'] = season = Season.get_current_season()
 
-    all_users = season.scoreboard()
+    if gender=="male":
+        gender = 1
+    elif gender=="female":
+        gender = 2
+    else:
+        gender == "all"
+
+    all_users = season.scoreboard(gender)
     context['users'] = all_users[0]
     context['lazy_users'] = all_users[1]
-    context['season'] = season
+
     grouped_events = season.scoreboard_events()
     flattened_events = []
     for group in grouped_events:
@@ -221,3 +227,23 @@ def userprofile(request):
     else:
         context['form'] = UserProfileForm(instance=request.user.userprofile)
         return render(request, 'mangekamp/userprofile.html', context)
+
+@login_required
+def email_event(request, event_id):
+    context = {}
+
+    if request.method == 'POST':
+        form = EmailEventForm(request.POST)
+        if form.is_valid():
+            # TODO: Send to everyone
+            send_mail(form.cleaned_data['title'], form.cleaned_data['body'], 'Mangekampen <Capgemini.Trondheim.MK@gmail.com>', ['dagolav@prestegarden.com'], fail_silently=False) 
+            messages.add_message(request, messages.SUCCESS, 'Epost ble sendt.')
+            # TODO: Better redirect
+            return HttpResponseRedirect(reverse('admin:index'))
+        else: 
+            context['form'] = form
+            return render(request, 'mangekamp/event_emailform.html',  context)
+    else:
+        form = EmailEventForm()
+        context['form'] = form
+        return render(request, 'mangekamp/event_emailform.html', context)

@@ -3,6 +3,8 @@
 from django.contrib import admin
 from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin as AuthUserAdmin
+from django.utils.safestring import mark_safe
+from django.core.urlresolvers import reverse
 
 from mangekamp.models import Season, Event, Participation, UserProfile
 
@@ -18,9 +20,10 @@ class ParticipationInline(admin.TabularInline):
     model = Participation
     can_delete = True
 
+
 class EventAdmin(admin.ModelAdmin):
     inlines = [ParticipationInline]
-    list_display = ('name', 'category', 'season')
+    list_display = ('name', 'category', 'season', )
     list_filter = ('category', 'season')
 
 class EventInline(admin.TabularInline):

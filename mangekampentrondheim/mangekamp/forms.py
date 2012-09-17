@@ -32,3 +32,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
+
+class EmailEventForm(forms.Form):
+    title = forms.CharField()
+    body = forms.CharField(widget=forms.Textarea())

@@ -32,7 +32,8 @@
   </head>
 
   <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+
+    <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -45,6 +46,7 @@
             <ul class="nav">
               <li><a href="{% url events_listing %}">Alle Events</a></li>
               <li><a href="{% url scoreboard %}">Scoreboard</a></li>
+              <li style=display:none;" id="loading-indicator"><img src="/static/img/loading.gif"></img></li>
             </ul>
             {% if user.is_authenticated %}
             <ul class="pull-right nav nav-collapse collapse">
@@ -91,7 +93,6 @@
     
     <div class="modal" style="display:none;" id="modal_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     </div>
-    <img style="display:none;" id="loading-indicator" src="/static/img/loading.gif"></img>
     <!-- Javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

@@ -2,10 +2,6 @@
 {% load filters %}
 {% block scripts %}
 <script>
-    $(document).ready(function() {
-        $("#scoreboard").load("/activity_board/{{ current_season.id}}");
-    });
-
     $(".results_btn").click(function() {
         var btn = $(this);
         var loading = $("#loading-indicator");
@@ -71,12 +67,7 @@
 
 {% block content %}
       <div class="row-fluid">
-          <div class="span2" id="scoreboard">
-              <p class="pagination-centered" style="font-size:2em;">
-                Henter scoreboard...
-              </p>
-          </div>
-        <div class="span10">
+        <div class="span12">
           <div class="hero-unit">
             <h1>Velkommen til mangekampen!</h1>
             <p>
