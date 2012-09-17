@@ -127,7 +127,7 @@ def scoreboard_excel(request, season_id):
         season = get_object_or_404(Season, id=season_id)
     else:
         season = Season.get_current_season()
-    scoreboard = season.scoreboard()
+    scoreboard = season.scoreboard("all")
 
     response = HttpResponse(mimetype="application/ms-excel")
     response['Content-Disposition'] = 'attachment; filename=scoreboard.xls'
@@ -175,6 +175,7 @@ def scoreboard_excel(request, season_id):
 
     # Handle champions
     sheet.write(1, 0, "Mangekjempere", styles['overskrift'])
+    i = 2
     for i, champ in enumerate(champs, start=2):
         sheet.write(i, 0, champ[0].get_full_name())
         sheet.write(i, 1, champ[1]['score'])
@@ -236,7 +237,9 @@ def email_event(request, event_id):
         form = EmailEventForm(request.POST)
         if form.is_valid():
             # TODO: Send to everyone
-            send_mail(form.cleaned_data['title'], form.cleaned_data['body'], 'Mangekampen <Capgemini.Trondheim.MK@gmail.com>', ['dagolav@prestegarden.com'], fail_silently=False) 
+            emails = [p.participant.userprofile.get_email() for p in Participation.objects.select_related().filter(event__id=event_id)]
+            print emails
+            send_mail(form.cleaned_data['title'], form.cleaned_data['body'], 'Mangekampen <Capgemini.Trondheim.MK@gmail.com>', emails, fail_silently=False) 
             messages.add_message(request, messages.SUCCESS, 'Epost ble sendt.')
             # TODO: Better redirect
             return HttpResponseRedirect(reverse('admin:index'))
