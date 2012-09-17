@@ -13,4 +13,5 @@ urlpatterns = patterns('mangekamp.views',
     url(r'^events_listing/$', 'events_listing', name='events_listing'),
     url(r'^userprofile/$', 'userprofile', name='userprofile'),
     url(r'^email_event/(?P<event_id>\d+)$', 'email_event', name='email_event'),
+    url(r'^ical/(?P<season_id>\d+)$', 'ical', name='ical'),
 )

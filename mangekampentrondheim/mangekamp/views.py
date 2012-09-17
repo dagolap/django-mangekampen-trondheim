@@ -9,6 +9,8 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 
+import vobject
+
 from mangekamp.models import Season, Event, Participation
 from mangekamp.forms import UserProfileForm, EmailEventForm
 
@@ -250,3 +252,20 @@ def email_event(request, event_id):
         form = EmailEventForm()
         context['form'] = form
         return render(request, 'mangekamp/event_emailform.html', context)
+
+@login_required
+def ical(request, season_id=None):
+    cal = vobject.iCalendar()
+    cal.add('method').value = 'PUBLISH'  # IE/Outlook needs this
+    if not season_id:
+        season = Season.get_current_season()
+    else:
+        season = Season.objects.get(id=season_id)
+
+    for event in season.get_future_events():
+        vevent = cal.add('vevent')
+    icalstream = cal.serialize()
+    response = HttpResponse(icalstream, mimetype='text/calendar')
+    response['Filename'] = 'mangekampen.ics'  # IE needs this
+    response['Content-Disposition'] = 'attachment; filename=filename.ics'
+    return response
