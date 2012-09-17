@@ -2,7 +2,7 @@
 {% load filters %}
 {% block scripts %}
 <script>
-  $(".results_btn").click(function() {
+    $(".results_btn").click(function() {
         var btn = $(this);
         var loading = $("#loading-indicator");
         var loading_anim_timer = setTimeout(function() {
@@ -15,41 +15,127 @@
             loading.hide();
         });
     });
+
+    $(".signup_btn").click(function() {
+        var clicked_button = $(this);
+        var event_id = $(this).attr('id').split("_")[1];
+        var loading = $("#loading-indicator");
+        var loading_anim_timer = setTimeout(function() {
+            loading.show();
+        }, 10);
+        $.ajax({url:"/signup/"+event_id}).done(function(data) {
+            clearTimeout(loading_anim_timer);
+            loading.hide();
+            var result = jQuery.parseJSON(data);
+            if (result.signed_up == true) {
+                clicked_button.html("Påmeldt");
+                clicked_button.removeClass("btn-danger");
+                clicked_button.addClass("btn-success signed_up");
+            } else if (result.signed_up == false) {
+                clicked_button.html("Meld meg på!");
+                clicked_button.removeClass("btn-success btn-danger signed_up");
+            }
+        });
+    });
+
+    $(".signup_btn").mouseover(function() {
+        var btn = $(this);
+        if (btn.hasClass("signed_up")) {
+            btn.html("Meld av");
+            btn.removeClass("btn-success");
+            btn.addClass("btn-danger");
+        } else if (!btn.hasClass("signed_up")) {
+            btn.html("Meld meg på!");
+            btn.removeClass("btn-danger");
+            btn.addClass("btn-success");
+        }
+    });
+
+    $(".signup_btn").mouseout(function() {
+        var btn = $(this);
+        if (!btn.hasClass("signed_up")) {
+            btn.html("Meld meg på!");
+            btn.removeClass("btn-success");
+        } else if (btn.hasClass("signed_up")) {
+            btn.html("Påmeldt");
+            btn.removeClass("btn-danger");
+            btn.addClass("btn-success");
+        }
+    });
+
+    $(".info_btn").popover({
+        trigger: 'click',
+        placement: 'top'
+    });
+
 </script>
 {% endblock %}
-{% block content %}
-      <div class="row-fluid">
-         <h1 name="future">Kommende events</h1>
-          <div class="row-fluid">
-           <ul>
-            {% for event in future_events %}
-              <li>
-               <p>
-                <a id="results_{{event.id}}" class="btn btn-block results_btn">
-                  {{ event.name }} ({{ event.get_category_display }}) <br />
-                  {{ event.location}}, {{ event.time}} 
-                </a>
-               </p>
-              </li>
-            {% endfor %}
-           </ul>
-          </div><!--/row-->
-      </div><!--/row-->
-         <h1 name="past">Tidligere events</h1>
-          <div class="row-fluid">
-           <ul>
-            {% for event in past_events %}
-              <li>
-               <p>
-                <a id="results_{{event.id}}" class="btn btn-block results_btn">
-                  {{ event.name }} ({{ event.get_category_display }}) <br />
-                  {{ event.location}}, {{ event.time}} 
-                </a>
-               </p>
-              </li>
-            {% endfor %}
-           </ul>
-          </div><!--/row-->
-      </div><!--/row-->
-{% endblock %}
 
+{% block content %}
+<div class="row-fluid">
+    <h1 name"future">Kommende events</h1>
+    <div style="row-fluid">
+        {% for event in future_events %}
+           <table class="thumbnail span4">
+                <tr>
+                    <td>
+                        <div style="-moz-transform:rotate(-90deg); -webkit-transform:rotate(-90deg)">
+                            <h2>Uke{{event.time|date:"W"}}</h2>
+                        </div> 
+                    </td>
+                    <td>
+                        <ul class="unstyled">
+                                <li><h3 style="text-align:center;">{{ event.name }} ({{ event.get_category_display }})</h3></li>
+                                <li><div style="height:100px; overflow:hidden;"><img src={{ event.image.url }} alt="" class="span12"></div></li>
+                                <li>
+                                    <p style="padding-top:5px">
+                                        <a class="btn btn-primary info_btn" rel="popover" 
+                                        data-content="<p><b>Sted:</b> {{ event.location}}</p><p>{{event.description}}</p>" 
+                                        data-original-title="<b>Tid:</b> {{event.time|date:"j/n"}} kl. {{event.time|date:"G:i"}}">
+                                        Info</a>
+                                        {% if event|has_user:request.user %}
+                                            <a id="signup_{{event.id}}" class="btn signup_btn btn-success signed_up">Påmeldt</a>
+                                        {% else %}
+                                            <a id="signup_{{event.id}}" class="btn signup_btn">Meld meg på!</a>
+                                        {% endif %}
+                                    </p>
+                                </li>
+                            </ul>
+                    </td>
+                </tr>
+           </table>
+        {% endfor %}
+    </div>
+</div>
+<div class="row-fluid">
+    <h1 name"past">Tidligere events</h1>
+    <div style="row-fluid">
+        {% for event in past_events %}
+           <table class="thumbnail span4">
+                <tr>
+                    <td>
+                        <div style="-moz-transform:rotate(-90deg); -webkit-transform:rotate(-90deg)">
+                            <h2>Uke{{event.time|date:"W"}}</h2>
+                        </div> 
+                    </td>
+                    <td>
+                        <ul class="unstyled">
+                                <li><h3 style="text-align:center;">{{ event.name }} ({{ event.get_category_display }})</h3></li>
+                                <li><div style="height:100px; overflow:hidden;"><img src={{ event.image.url }} alt="" class="span12"></div></li>
+                                <li>
+                                    <p style="padding-top:5px">
+                                        <a class="btn btn-primary info_btn" rel="popover" 
+                                        data-content="<p><b>Sted:</b> {{ event.location}}</p><p>{{event.description}}</p>" 
+                                        data-original-title="<b>Tid:</b> {{event.time|date:"j/n"}} kl. {{event.time|date:"G:i"}}">
+                                        Info</a>
+                                        <a id="results_{{event.id}}" class="btn results_btn">Se resultater</a></p>
+                                    </p>
+                                </li>
+                            </ul>
+                    </td>
+                </tr>
+           </table>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
