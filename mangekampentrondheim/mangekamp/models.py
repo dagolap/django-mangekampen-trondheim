@@ -22,6 +22,12 @@ class UserProfile(models.Model):
     gender = models.IntegerField("kjønn", choices=GENDER_CHOICES, default=1)
     alternative_email = models.EmailField("alternativ epost", null=True)
 
+    def get_email(self):
+        if self.alternative_email:
+            return self.alternative_email
+        else:
+            return self.user.email
+
     def is_mangekjemper(self, season_id):
         season = Season.objects.select_related('events').get(id=season_id)
         all_participations = Participation.objects.select_related().filter(event__season__id=season_id, participant=self.user, score__isnull=False)
