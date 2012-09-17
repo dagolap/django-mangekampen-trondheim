@@ -35,6 +35,20 @@ MESSAGE_TAGS = {messages.DEBUG: 'alert-error',
         messages.ERROR: 'alert-error',}
 
 
+## Filebrowser image versions
+FILEBROWSER_VERSIONS_BASEDIR = 'versions'
+FILEBROWSER_VERSIONS =  {
+    'admin_thumbnail': {'verbose_name': 'Admin Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
+    'thumbnail': {'verbose_name': 'Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
+    'small': {'verbose_name': 'Small', 'width': 140, 'height': '', 'opts': ''},
+    'medium': {'verbose_name': 'Medium', 'width': 300, 'height': '', 'opts': ''},
+    'large': {'verbose_name': 'Large', 'width': 460, 'height': '', 'opts': ''},
+}
+FILEBROWSER_ADMIN_VERSIONS = ['thumbnail', 'small', 'medium', 'large']
+FILEBROWSER_ADMIN_THUMBNAIL = 'admin_thumbnail'
+
+
+
 LOGIN_URL = "/accounts/login/"
 
 TEMPLATE_CONTEXT_PROCESSORS = (
