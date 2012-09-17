@@ -10,6 +10,7 @@ from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
 
 import vobject
+import datetime
 
 from mangekamp.models import Season, Event, Participation
 from mangekamp.forms import UserProfileForm, EmailEventForm
@@ -264,6 +265,11 @@ def ical(request, season_id=None):
 
     for event in season.get_future_events():
         vevent = cal.add('vevent')
+        vevent.add('dtstart').value = event.time
+        vevent.add('dtend').value = event.time + datetime.timedelta(hours=2)
+        vevent.add('summary').value = event.name
+        vevent.add('location').value = event.location
+        vevent.add('description').value = event.description
     icalstream = cal.serialize()
     response = HttpResponse(icalstream, mimetype='text/calendar')
     response['Filename'] = 'mangekampen.ics'  # IE needs this
