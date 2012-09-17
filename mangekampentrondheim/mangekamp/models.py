@@ -23,8 +23,8 @@ class UserProfile(models.Model):
     alternative_email = models.EmailField("alternativ epost", null=True)
 
     def is_mangekjemper(self, season_id):
-        season = Season.objects.get(id=season_id)
-        all_participations = Participation.objects.filter(event__season__id=season_id, participant=self.user, score__isnull=False)
+        season = Season.objects.select_related('events').get(id=season_id)
+        all_participations = Participation.objects.select_related().filter(event__season__id=season_id, participant=self.user, score__isnull=False)
         num_events = all_participations.count()
         num_categories = len(set([p.event.category for p in all_participations]))
 
@@ -34,7 +34,7 @@ class UserProfile(models.Model):
         if not self.is_mangekjemper(season_id):
             return 0;
 
-        participations = Participation.objects.filter(event__season__id=season_id, participant=self.user, score__isnull=False).order_by('event__category', 'score')
+        participations = Participation.objects.select_related().filter(event__season__id=season_id, participant=self.user, score__isnull=False).order_by('event__category', 'score')
         participations = groupby(participations, lambda p: p.event.category)
         scores_list = []
         counting_scores = []
@@ -47,14 +47,14 @@ class UserProfile(models.Model):
             flattened_scores += category
 
         flattened_scores.sort(key=lambda p: p.score)
-        season = Season.objects.get(id=season_id)
+        season = Season.objects.select_related('events').get(id=season_id)
         counting_scores += flattened_scores[:season.required_events-len(counting_scores)]
         counting_scores = [p.score for p in counting_scores]
 
         return float(reduce(operator.add, counting_scores)) / len(counting_scores)
 
     def get_eventscores(self):
-        participations = Participation.objects.filter(participant=self.user, event__season=Season.get_current_season())
+        participations = Participation.objects.select_related().filter(participant=self.user, event__season=Season.get_current_season())
         return [(p.event.name, p.score) for p in participations]
 
 
@@ -81,27 +81,27 @@ class Season(models.Model):
 
     @staticmethod
     def get_current_season():
-        active_seasons = Season.objects.filter(startDate__lte=datetime.today(), endDate__gte=datetime.today())
+        active_seasons = Season.objects.select_related('events').filter(startDate__lte=datetime.today(), endDate__gte=datetime.today())
         if active_seasons:
             return active_seasons[0]
         else:
             pass
 
     def get_past_events(self):
-        return Event.objects.filter(time__lt=datetime.today(), season=self).order_by("-time")
+        return Event.objects.select_related('participations', 'season').filter(time__lt=datetime.today(), season=self).order_by("-time")
 
     def get_future_events(self):
-        return Event.objects.filter(time__gte=datetime.today(), season=self).order_by("time")
+        return Event.objects.select_related('participations', 'season').filter(time__gte=datetime.today(), season=self).order_by("time")
 
     def get_finished_events(self):
-        return Event.objects.filter(finished=True, season=self)
+        return Event.objects.select_related('participations', 'season').filter(finished=True, season=self)
 
     def get_activity_board(self):
         events = self.get_finished_events()
         participants = [e.participants for e in events]
         participants = list(chain(*participants))
 
-        users = User.objects.all()
+        users = User.objects.select_related().all()
         scores = [(user, participants.count(user)) for user in users]
         scores.sort(key=lambda u: u[1], reverse=True)
         return scores
@@ -129,9 +129,9 @@ class Season(models.Model):
 
     def scoreboard(self, gender):
         if gender != "all":
-            active_users = User.objects.filter(is_active=True, userprofile__gender=gender)
+            active_users = User.objects.select_related('userprofile').filter(is_active=True, userprofile__gender=gender)
         else:
-            active_users = User.objects.filter(is_active=True)
+            active_users = User.objects.select_related('userprofile').filter(is_active=True)
         sorted_events = self.scoreboard_events()
         stat_dict = {}
         for user in active_users:
@@ -141,13 +141,15 @@ class Season(models.Model):
             stat_dict[user]['events'] = OrderedDict()
             stat_dict[user]['score'] = user.userprofile.get_score(self.id)
 
+        participations = Participation.objects.select_related().filter(score__isnull=False)
         for group in sorted_events:
             for event in group:
                 for user in active_users:
                     stat_dict[user]['events'][event.name] = (0, event.category)
 
                 # TODO: Refactor.
-                for participation in Participation.objects.filter(event=event, score__isnull=False):
+                for participation in [p for p in participations if p.event == event]:
+                    #for participation in Participation.objects.select_related().filter(event=event, score__isnull=False):
                     participant = participation.participant
                     if participant in active_users:
                         stat_dict[participant]['events'][event.name] = (participation.score, event.category)
@@ -202,11 +204,11 @@ class Event(models.Model):
         verbose_name_plural="arrangement"
     
     def get_scores(self):
-        return Participation.objects.filter(event=self).order_by('score')
+        return Participation.objects.select_related().filter(event=self).order_by('score')
 
     @property
     def participants(self):
-        return [p.participant for p in Participation.objects.filter(event=self)]
+        return [p.participant for p in Participation.objects.select_related().filter(event=self)]
 
 
 class Participation(models.Model):

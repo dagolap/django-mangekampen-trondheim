@@ -12,11 +12,24 @@
 <div class="modal-body">
 <p>
 {% if scores %}
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Navn</th>
+            <th>Plassering</th>
+        </tr>
+    </thead>
+    <tbody>
     {% for s in scores %}
-    {{ s }}<br />
+        <tr>
+            <td>{{ s.participant.get_full_name }}</td>
+            <td>{{ s.score }}</td>
+        </tr>
     {% endfor %}
+    </tbody>
+</table>
 {% else %}
-   Det foreligger ingen resultater for denne konkurransen. Trolig har ikke ansvarlig registrert poengene i systemet ennå. 
+Det foreligger ingen resultater for denne konkurransen. Trolig har ikke ansvarlig registrert poengene i systemet ennå.
 {% endif %}
 </p>
 </div>

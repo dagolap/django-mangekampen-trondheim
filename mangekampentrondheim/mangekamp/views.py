@@ -55,7 +55,7 @@ def custom_login(request):
 @login_required
 def toggle_signup(request, event_id):
     event = get_object_or_404(Event, id=event_id)
-    participation = Participation.objects.filter(event=event, participant=request.user)
+    participation = Participation.objects.select_related().filter(event=event, participant=request.user)
     if participation:
         try:
             for p in participation:
