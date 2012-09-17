@@ -85,43 +85,48 @@
           <h1>Neste events</h1>
           <div class="row-fluid">
             {% for event in future_events|slice:":3" %}
-            <div class="span1">
-                <img src="{{ event.image.url }}"></img>
-            </div>
-            <div class="span3">
-              <h2>{{ event.name }}</h2>
-              <p>
-                    <b>Tid:</b> {{ event.time }}<br />
-                    <b>Sted:</b> <a href="{{event.location_url}}">{{event.location}}</a><br />
-              </p>
-              <p>
-                  {{ event.description }}
-              </p>
-              {% if event|has_user:request.user %}
-              <p><a id="signup_{{event.id}}" class="btn btn-block signup_btn btn-success signed_up">Påmeldt</a></p>
-              {% else %}
-              <p><a id="signup_{{event.id}}" class="btn btn-block signup_btn">Meld meg på!</a></p>
-              {% endif %}
-            </div><!--/span-->
+            
+            <div class="thumbnail span4">
+                <div class="span4">
+                    <img src="{{ event.image.url }}"></img>
+                </div>
+                <div class="span8">
+                  <h2>{{ event.name }}</h2>
+                  <p>
+                        <b>Tid:</b> {{ event.time }}<br />
+                        <b>Sted:</b> <a href="{{event.location_url}}">{{event.location}}</a><br />
+                  </p>
+                  <p>
+                      {{ event.description }}
+                  </p>
+                  {% if event|has_user:request.user %}
+                  <p><a id="signup_{{event.id}}" class="btn btn-block signup_btn btn-success signed_up">Påmeldt</a></p>
+                  {% else %}
+                  <p><a id="signup_{{event.id}}" class="btn btn-block signup_btn">Meld meg på!</a></p>
+                  {% endif %}
+                </div><!--/span-->
+            </div> <!-- thumbnail -->
             {% endfor %}
           </div><!--/row-->
           <h1>Forrige events</h1>
           <div class="row-fluid">
             {% for event in past_events|slice:":3" %}
-            <div class="span1">
-                <img src="{{ event.image.url }}"></img>
-            </div>
-            <div class="span3">
-              <h2>{{ event.name }}</h2>
-              <p>
-                    <b>Tid:</b> {{ event.time }}<br />
-                    <b>Sted:</b> <a href="{{event.location_url}}">{{event.location}}</a><br />
-              </p>
-              <p>
-                  {{ event.description }}
-              </p>
-              <p><a id="results_{{event.id}}" class="btn btn-block results_btn">Se resultater</a></p>
-            </div><!--/span-->
+            <div class="thumbnail span4">
+                <div class="span4">
+                    <img src="{{ event.image.url }}"></img>
+                </div>
+                <div class="span8">
+                  <h2>{{ event.name }}</h2>
+                  <p>
+                        <b>Tid:</b> {{ event.time }}<br />
+                        <b>Sted:</b> <a href="{{event.location_url}}">{{event.location}}</a><br />
+                  </p>
+                  <p>
+                      {{ event.description }}
+                  </p>
+                  <p><a id="results_{{event.id}}" class="btn btn-block results_btn">Se resultater</a></p>
+                </div><!--/span-->
+            </div><!-- thumbail -->
             {% endfor %}
           </div><!--/row-->
         </div><!--/span-->
