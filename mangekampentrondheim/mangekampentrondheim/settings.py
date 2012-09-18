@@ -3,7 +3,7 @@ from django.contrib.messages import constants as messages
 import dj_database_url
 import os 
 
-PROJECT_ROOT_DIRECTORY = os.path.join(os.path.dirname(globals()['__file__']),'..')
+#PROJECT_ROOT_DIRECTORY = os.path.join(os.path.dirname(globals()['__file__']),'..')
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
@@ -154,8 +154,8 @@ ROOT_URLCONF = 'mangekampentrondheim.urls'
 WSGI_APPLICATION = 'mangekampentrondheim.wsgi.application'
 
 TEMPLATE_DIRS = (
-        os.path.join(PROJECT_ROOT_DIRECTORY, 'templates'),
-     #   'templates',
+#        os.path.join(PROJECT_ROOT_DIRECTORY, 'templates'),
+        'templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
