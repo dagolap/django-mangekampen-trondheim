@@ -1,36 +1,22 @@
 # Django settings for mangekampentrondheim project.
 from django.contrib.messages import constants as messages
-#import dj_database_url
+import dj_database_url
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
-DEBUG_TOOLBAR_CONFIG = {
-    'INTERCEPT_REDIRECTS': False,
-}
-
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('Mangekampen Trondheim', 'Capgemini.Trondheim.MK@gmail.com'),
+    ('Dag Olav Prestegarden', 'dagolav@prestegarden.com'),
 )
 
 MANAGERS = ADMINS
 
-INTERNAL_IPS=('192.168.56.1')
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'mangekampen.db',                      # Or path to database file if using sqlite3.
-
-        'USER': '',                      # Not used with sqlite3.
-        'PASSWORD': '',                  # Not used with sqlite3.
-        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
-        #'default':dj_database_url.config(default='postgres://localhost')
-    }
+    'default':dj_database_url.config(default='postgres://localhost')
 }
 
-################
+## Translates messages tags into our correct CSS classes
 MESSAGE_TAGS = {messages.DEBUG: 'alert-error',
         messages.INFO: 'alert-info',
         messages.SUCCESS: 'alert-success',
@@ -51,8 +37,9 @@ FILEBROWSER_ADMIN_VERSIONS = ['thumbnail', 'small', 'medium', 'large']
 FILEBROWSER_ADMIN_THUMBNAIL = 'admin_thumbnail'
 
 
-
+## Default login url when someone doesnt have @login_required
 LOGIN_URL = "/accounts/login/"
+
 
 TEMPLATE_CONTEXT_PROCESSORS = (
    'django.core.context_processors.request',
@@ -63,10 +50,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 
-
-
 ###############
-
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -186,7 +170,6 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'south',
     'registration',
-    'debug_toolbar',
     'mangekamp',
 )
 
@@ -218,3 +201,10 @@ LOGGING = {
         },
     }
 }
+
+
+## We overwrite any settings with local development-settings
+try:
+    from local_settings import *
+except ImportError, e:
+    pass
