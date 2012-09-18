@@ -3,7 +3,7 @@ Du (eller noen som later som om de er deg) har opprettet en konto på
 
 For å aktivere kontoen din gå til følgende adresse innen {{expiration_days}} dager:
 
-http://{{site.domain}}{% url registratin_activate activation_key %}
+http://{{site.domain}}{% url registration_activate activation_key %}
 
 MvH
 
