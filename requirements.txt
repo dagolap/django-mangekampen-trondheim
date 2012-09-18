@@ -9,6 +9,7 @@ django-filebrowser==3.5.0
 django-grappelli==2.4.0
 django-registration==0.8
 psycopg2==2.4.5
+gevent==0.13.8
 gunicorn==0.14.6
 python-dateutil==2.1
 six==1.2.0
