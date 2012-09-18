@@ -7,5 +7,8 @@ django-debug-toolbar==0.9.4
 django-filebrowser==3.5.0
 django-grappelli==2.4.0
 django-registration==0.8
+python-dateutil==2.1
+six==1.2.0
+vobject==0.8.1c
 wsgiref==0.1.2
 xlwt==0.7.4
