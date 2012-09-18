@@ -1,7 +1,7 @@
 # Django settings for mangekampentrondheim project.
 from django.contrib.messages import constants as messages
 import dj_database_url
-import os 
+import os, re
 
 PROJECT_ROOT_DIRECTORY = os.path.join(os.path.dirname(globals()['__file__']),'..')
 
@@ -17,6 +17,15 @@ MANAGERS = ADMINS
 DATABASES = {
     'default':dj_database_url.config(default='postgres://localhost')
 }
+
+## Urls that can be ignored so we dont get spam email sent to us.
+IGNORABLE_404_URLS = (
+    re.compile(r'^/apple-touch-icon.*\.png$'),
+    re.compile(r'^/favicon\.ico$'),
+    re.compile(r'^/robots\.txt$'),
+    re.compile(r'\.(php|cgi)$'),
+    re.compile(r'^/phpmyadmin/'),
+)
 
 ## Translates messages tags into our correct CSS classes
 MESSAGE_TAGS = {messages.DEBUG: 'alert-error',
