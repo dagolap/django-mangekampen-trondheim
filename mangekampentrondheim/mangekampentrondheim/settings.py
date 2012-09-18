@@ -1,4 +1,3 @@
-# Django settings for mangekampentrondheim project.
 from django.contrib.messages import constants as messages
 import dj_database_url
 import os, re
