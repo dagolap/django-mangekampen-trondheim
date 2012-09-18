@@ -1,1 +1,1 @@
-web: sh start_server.sh 
+web: sh runserver.sh
