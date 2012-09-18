@@ -9,7 +9,6 @@ DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Mangekampen Trondheim', 'Capgemini.Trondheim.MK@gmail.com'),
     ('Dag Olav Prestegarden', 'dagolav@prestegarden.com'),
 )
 
