@@ -19,7 +19,7 @@ from mangekamp.forms import UserProfileForm, EmailEventForm
 def home(request):
     current_season = Season.get_current_season()
     future_events = []
-    previous_events = []
+    past_events = []
 
     if current_season:
         future_events = current_season.get_future_events()
