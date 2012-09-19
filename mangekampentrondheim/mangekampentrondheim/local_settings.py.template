@@ -84,7 +84,6 @@ INSTALLED_APPS = (
     'south',
     'registration',
     'debug_toolbar',
-    'gunicorn',
     'mangekamp',
 )
 
