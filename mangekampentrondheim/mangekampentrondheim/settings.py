@@ -56,6 +56,7 @@ FILEBROWSER_ADMIN_THUMBNAIL = 'admin_thumbnail'
 
 ## Default login url when someone doesnt have @login_required
 LOGIN_URL = "/accounts/login/"
+LOGIN_REDIRECT_URL = "/"
 
 
 TEMPLATE_CONTEXT_PROCESSORS = (
