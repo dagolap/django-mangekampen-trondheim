@@ -20,7 +20,7 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, editable=False)
 
     gender = models.IntegerField("kjønn", choices=GENDER_CHOICES, default=1)
-    alternative_email = models.EmailField("alternativ epost", null=True)
+    alternative_email = models.EmailField("alternativ epost", null=True, blank=True)
 
     def get_email(self):
         if self.alternative_email:
@@ -192,15 +192,15 @@ class Event(models.Model):
         )
 
     name = models.CharField("navn", max_length=50)
-    description = models.TextField("beskrivelse", null=True)
+    description = models.TextField("beskrivelse", null=True, blank=True)
     time = models.DateTimeField("tid")
-    location = models.CharField("sted", null=True, max_length=100)
-    location_url = models.URLField("link til kart", null=True, max_length=500)
-    finished = models.BooleanField("ferdig")
+    location = models.CharField("sted", null=True, max_length=100, blank=True)
+    location_url = models.URLField("link til kart", null=True, blank=True, max_length=500)
+    finished = models.BooleanField("ferdig", default=False)
     season = models.ForeignKey(Season, verbose_name="sesong")
     category = models.IntegerField("kategori", choices=CATEGORY_CHOICES)
     image = FileBrowseField("bilde", max_length=200, directory="images/", extensions=[".jpg",".jpeg",".png",".gif"], blank=True, null=True)
-    administrator = models.ForeignKey(User, verbose_name="ansvarlig")
+    administrator = models.ForeignKey(User, verbose_name="ansvarlig", blank=True, null=True)
 
     def __unicode__(self):
         return u"{0} - {1}".format(self.name, self.season)
@@ -220,7 +220,7 @@ class Event(models.Model):
 class Participation(models.Model):
     event = models.ForeignKey(Event, verbose_name="arrangement")
     participant = models.ForeignKey(User, verbose_name="deltaker")
-    score = models.IntegerField("score", null=True)
+    score = models.IntegerField("score", null=True, blank=True)
 
     def __unicode__(self):
         return u"{0} ({1}) - {2}({3})".format(self.event.name, self.event.season.title, self.participant, self.score)
