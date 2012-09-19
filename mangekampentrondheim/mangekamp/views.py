@@ -209,9 +209,8 @@ def events_listing(request, season_id=None):
     else:
         current_season = Season.get_current_season()
 
-    current_season = Season.get_current_season()
-    past_events = current_season.get_past_events()
-    future_events = current_season.get_future_events()
+    past_events = current_season.get_past_events() if current_season else []
+    future_events = current_season.get_future_events() if current_season else []
     context = {'past_events':past_events,
                'future_events':future_events
               }
