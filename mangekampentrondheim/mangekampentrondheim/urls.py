@@ -41,9 +41,3 @@ urlpatterns += patterns('',
             'show_indexes': True
             })
         )
-
-# If we are running on heroku:
-if not settings.DEBUG:
-    urlpatterns += patterns('',
-            (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':settings.STATIC_ROOT}),
-            )

@@ -24,11 +24,7 @@
 {% endblock %}
 
 {% block object-tools-items %}
-   <li style=display:none;" id="loading-indicator"><img src="/static/img/loading.gif"></img></li>
+<li style=display:none;" id="loading-indicator"><img src="{{ STATIC_URL }}img/loading.gif"></img></li>
    <li><a href="#" class="historylink" id="send-mail-button">Send epost til deltakere</a></li>
    {{ block.super }}
-{% endblock %}
-
-{% block after_field_sets %}
-    <div id="mail-dialog">asdkaskdjaksj</div>
 {% endblock %}
