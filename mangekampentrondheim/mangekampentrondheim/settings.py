@@ -3,6 +3,7 @@ import dj_database_url
 import os, re
 
 PROJECT_ROOT_DIRECTORY = os.path.join(os.path.dirname(globals()['__file__']),'..')
+GRAPPELLI_ADMIN_TITLE = "Mangekampen Trondheim"
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
