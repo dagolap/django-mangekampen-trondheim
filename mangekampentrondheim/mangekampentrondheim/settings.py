@@ -1,12 +1,13 @@
-# Django settings for mangekampentrondheim project.
 from django.contrib.messages import constants as messages
 import dj_database_url
+import os, re
+
+PROJECT_ROOT_DIRECTORY = os.path.join(os.path.dirname(globals()['__file__']),'..')
 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Mangekampen Trondheim', 'Capgemini.Trondheim.MK@gmail.com'),
     ('Dag Olav Prestegarden', 'dagolav@prestegarden.com'),
 )
 
@@ -15,6 +16,15 @@ MANAGERS = ADMINS
 DATABASES = {
     'default':dj_database_url.config(default='postgres://localhost')
 }
+
+## Urls that can be ignored so we dont get spam email sent to us.
+IGNORABLE_404_URLS = (
+    re.compile(r'^/apple-touch-icon.*\.png$'),
+    re.compile(r'^.*/favicon\.ico$'),
+    re.compile(r'^/robots\.txt$'),
+    re.compile(r'\.(php|cgi)$'),
+    re.compile(r'^/phpmyadmin/'),
+)
 
 ## Translates messages tags into our correct CSS classes
 MESSAGE_TAGS = {messages.DEBUG: 'alert-error',
@@ -86,7 +96,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = 'media/'
+MEDIA_ROOT = os.path.join(PROJECT_ROOT_DIRECTORY, 'media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -102,7 +112,8 @@ FILEBROWSER_DIRECTORY = 'filebrowser/' # Relative to media root
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = 'collected_static'
+STATIC_ROOT =  os.path.join(PROJECT_ROOT_DIRECTORY, 'collected_static')
+#STATIC_ROOT = 'collected_static'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -110,7 +121,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
-        'static',
+    os.path.join(PROJECT_ROOT_DIRECTORY, 'static'),
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -151,6 +162,7 @@ ROOT_URLCONF = 'mangekampentrondheim.urls'
 WSGI_APPLICATION = 'mangekampentrondheim.wsgi.application'
 
 TEMPLATE_DIRS = (
+#        os.path.join(PROJECT_ROOT_DIRECTORY, 'templates'),
         'templates',
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
@@ -170,6 +182,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'south',
     'registration',
+    'gunicorn',
     'mangekamp',
 )
 

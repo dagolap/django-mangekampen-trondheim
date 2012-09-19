@@ -31,12 +31,19 @@ urlpatterns = patterns('',
 )
 
 # Custom static media serving when running in debug mode
-if settings.DEBUG:
-    urlpatterns += staticfiles_urlpatterns()
+#if settings.DEBUG:
+# We self-host static-files no matter what
+urlpatterns += staticfiles_urlpatterns()
 
+urlpatterns += patterns('',
+        url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
+            'document_root': settings.MEDIA_ROOT,
+            'show_indexes': True
+            })
+        )
+
+# If we are running on heroku:
+if not settings.DEBUG:
     urlpatterns += patterns('',
-            url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
-                'document_root': settings.MEDIA_ROOT,
-                'show_indexes': True
-                })
+            (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root':settings.STATIC_ROOT}),
             )
