@@ -1,10 +1,8 @@
 from django.contrib.messages import constants as messages
-import dj_database_url
 import os, re
 
 PROJECT_ROOT_DIRECTORY = os.path.join(os.path.dirname(globals()['__file__']),'..')
-GRAPPELLI_ADMIN_TITLE = "Mangekampen Trondheim"
-
+GRAPPELLI_ADMIN_TITLE = "Mangekampen Trondheim" 
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
@@ -14,8 +12,16 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+#TODO: Change to postgres or similar
 DATABASES = {
-    'default':dj_database_url.config(default='postgres://localhost')
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'mangekampen.db',                      # Or path to database file if using sqlite3.
+        'USER': '',                      # Not used with sqlite3.
+        'PASSWORD': '',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
 }
 
 ## Urls that can be ignored so we dont get spam email sent to us.
@@ -97,12 +103,13 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = os.path.join(PROJECT_ROOT_DIRECTORY, 'media')
+#MEDIA_ROOT = os.path.join(PROJECT_ROOT_DIRECTORY, 'media')
+MEDIA_ROOT = "/home/mangekampentrondheim/media/"
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
-MEDIA_URL = '/media/'
+MEDIA_URL = 'http://media.mk.bitnexus.net/'
 
 # Filebrowser-settings
 FILEBROWSER_MEDIA_ROOT = MEDIA_ROOT
@@ -113,12 +120,12 @@ FILEBROWSER_DIRECTORY = 'filebrowser/' # Relative to media root
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT =  os.path.join(PROJECT_ROOT_DIRECTORY, 'collected_static')
-#STATIC_ROOT = 'collected_static'
+#STATIC_ROOT =  os.path.join(PROJECT_ROOT_DIRECTORY, 'collected_static')
+STATIC_ROOT = "/home/mangekampentrondheim/static/"
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
-STATIC_URL = '/static/'
+STATIC_URL = 'http://static.mk.bitnexus.net/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
