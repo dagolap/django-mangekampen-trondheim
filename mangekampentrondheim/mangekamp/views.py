@@ -109,15 +109,16 @@ def scoreboard(request, season_id=None, gender="all"):
     else:
         gender == "all"
 
-    all_users = season.scoreboard(gender)
-    context['users'] = all_users[0]
-    context['lazy_users'] = all_users[1]
+    all_users = season.scoreboard(gender) if season else None
+    context['users'] = all_users[0] if all_users else None
+    context['lazy_users'] = all_users[1] if all_users else None
 
-    grouped_events = season.scoreboard_events()
     flattened_events = []
-    for group in grouped_events:
-        for event in group:
-            flattened_events.append(event)
+    if season:
+        grouped_events = season.scoreboard_events()
+        for group in grouped_events:
+            for event in group:
+                flattened_events.append(event)
     context['events'] = flattened_events
 
     return render(request, 'mangekamp/full_scoreboard.html', context)
