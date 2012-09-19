@@ -1,26 +1,65 @@
+
 {% extends "registration/registration_base.html" %}
+
+{% block scripts %}
+<script>
+function CenterItem(theItem){
+    var winHeight = $(window).height();
+    var windowMiddle = winHeight/2;
+    var itemMiddle = $(theItem).height()/2;
+    var theMiddle = windowMiddle-itemMiddle;
+    if(winHeight>$(theItem).height()){
+        $(theItem).css("margin-top", theMiddle + "px");
+    } else {
+        $(theItem).css("margin-top", "0px" );
+    }
+}
+
+$(document).ready(function(){
+    CenterItem(".container");
+});
+
+$(window).resize(function(){
+    CenterItem(".container");
+});
+</script>
+{% endblock %}
 {% block title %}Login{% endblock %}
 {% block content %}
 
 {% if form.errors %}
 <p>Brukernavnet eller passordet du skrev inn var feil.</p>
 {% endif %}
-
-<form method="post" action="{% url django.contrib.auth.views.login %}">{% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
-<p><a href="{% url auth_password_reset %}">Glemt passord?</a> -  <a href="{% url registration_register %}">Registrer ny konto</a>?</p>
-
-<input type="submit" value="login" class="btn btn-default" />
-<input type="hidden" name="next" value="{{ next }}" />
-</form>
-
+<div class="container">
+    <div class="row">
+        <div class="offset4 span4">
+            <form method="post" action="{% url django.contrib.auth.views.login %}">
+                {% csrf_token %}
+                <div class="control-group">
+                    <label class="control-label" for="username">{{ form.username.label_tag }}</label> 
+                    <div class="controls" id="username">
+                        {{ form.username }}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="password"> {{ form.password.label_tag }}</label>
+                    <div class="controls" id="passworkd">
+                        {{ form.password }}
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <a href="{% url auth_password_reset %}">Glemt passord?</a> - <a href="{% url registration_register %}">Registrer ny konto?</a>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <input type="submit" value="Logg inn" class="btn btn-default" />
+                        <input type="hidden" name="next" value="{{ next }}" />
+                    </div>
+                </div>
+            </form>
+         </div>
+   </div>
+</div>
 {% endblock %}
