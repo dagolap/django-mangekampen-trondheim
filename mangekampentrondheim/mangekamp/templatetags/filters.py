@@ -1,4 +1,5 @@
 from django import template
+from mangekampentrondheim.settings import STATIC_URL
 register = template.Library()
 
 @register.filter("has_user")
@@ -16,11 +17,11 @@ def to_mangekjemper_status(season, values):
             future_categories.add(c)
 
     if values['attendance'] >= required_events and len(values['categories']) >= required_categories:
-        return '<img src="/static/img/mangekjemper_done.png" style="width:50px; height:50px;"></img>'
+        return '<img src="{0}img/mangekjemper_done.png" style="width:50px; height:50px;"></img>'.format(STATIC_URL)
     if values['attendance'] + len(future_events) >= required_events and len(future_categories) >= required_categories:
-        return '<img src="/static/img/mangekjemper_yes.png" style="width:50px; height:50px;"></img>'
+        return '<img src="{0}img/mangekjemper_yes.png" style="width:50px; height:50px;"></img>'.format(STATIC_URL)
     else:
-        return '<img src="/static/img/mangekjemper_no.png" style="width:50px; height:50px;"></img>'
+        return '<img src="{0}img/mangekjemper_no.png" style="width:50px; height:50px;"></img>'.format(STATIC_URL)
 
 @register.filter("category_to_style")
 def category_to_style(category):
