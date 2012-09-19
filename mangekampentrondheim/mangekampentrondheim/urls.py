@@ -21,10 +21,10 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
 
     # Django-registration app, with custom form for signup
-    url(r'^accounts/register/', registration_register, 
+    url(r'^accounts/register/$', registration_register, 
         {
             'backend':'registration.backends.default.DefaultBackend',
-            'form_class':MangekampRegistrationForm
+            'form_class':MangekampRegistrationForm,
         },
         name='registration_register'),
     url(r'^accounts/', include('registration.urls')),
