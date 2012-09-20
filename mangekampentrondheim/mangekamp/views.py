@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
@@ -235,7 +236,7 @@ def userprofile(request):
         context['form'] = UserProfileForm(instance=request.user.userprofile)
         return render(request, 'mangekamp/userprofile.html', context)
 
-@login_required
+@user_passes_test(lambda u: u.is_active and u.is_staff, login_url="/", redirect_field_name=None)
 def email_event(request, event_id):
     context = {}
 

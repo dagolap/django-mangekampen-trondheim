@@ -28,3 +28,7 @@
    <li><a href="#" class="historylink" id="send-mail-button">Send epost til deltakere</a></li>
    {{ block.super }}
 {% endblock %}
+
+{% block after_field_sets %}
+    <div id="mail-dialog"></div>
+{% endblock %}
