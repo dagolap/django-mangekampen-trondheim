@@ -8,6 +8,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.core.urlresolvers import reverse
+from django.utils.html import mark_safe
 
 import vobject
 import datetime
@@ -37,6 +38,8 @@ def home(request):
             'current_season':current_season
             }
  
+    if not request.user.first_name or not request.user.last_name:
+        messages.add_message(request, messages.WARNING, mark_safe(u'Det ser ikke ut at til du har fyllt ut profilen din. <a href="{0}">Endre i min profil</a>'.format(reverse('userprofile'))))
     return render(request, 'mangekamp/index.html', context)
 
 @csrf_protect

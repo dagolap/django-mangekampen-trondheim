@@ -26,13 +26,26 @@ class MangekampRegistrationForm(RegistrationForm):
             return self.cleaned_data['email']
 
 class UserProfileForm(forms.ModelForm):
+    first_name = forms.CharField(required=False, label="Fornavn")
+    last_name = forms.CharField(required=False, label="Etternavn")
+
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         self.fields['alternative_email'].required = False
+        userprofile = UserProfile.objects.get(id=self.initial['id'])
+        self.fields['first_name'].initial = userprofile.user.first_name
+        self.fields['last_name'].initial = userprofile.user.last_name
+
+    def save(self):
+        userprofile = super(UserProfileForm, self).save()
+        user = userprofile.user
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.save()
 
     class Meta:
         model = UserProfile
 
 class EmailEventForm(forms.Form):
-    title = forms.CharField()
-    body = forms.CharField(widget=forms.Textarea())
+    title = forms.CharField(label='Tittel')
+    body = forms.CharField(widget=forms.Textarea(), label='Innhold')
