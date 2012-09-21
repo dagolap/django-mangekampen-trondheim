@@ -1,1 +1,25 @@
 {% extends "base.html" %}
+{% block scripts %}
+<script>
+function CenterItem(theItem){
+    var winHeight = $(window).height();
+    var windowMiddle = winHeight/2;
+    var itemMiddle = $(theItem).height()/2;
+    var theMiddle = windowMiddle-itemMiddle;
+    if(winHeight>$(theItem).height()){
+        $(theItem).css("margin-top", theMiddle + "px");
+    } else {
+        $(theItem).css("margin-top", "0px" );
+    }
+}
+
+$(document).ready(function(){
+    CenterItem(".container");
+});
+
+$(window).resize(function(){
+    CenterItem(".container");
+});
+</script>
+{% endblock %}
+

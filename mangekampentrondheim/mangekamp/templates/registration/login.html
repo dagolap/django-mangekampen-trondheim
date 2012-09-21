@@ -1,29 +1,6 @@
 
 {% extends "registration/registration_base.html" %}
 
-{% block scripts %}
-<script>
-function CenterItem(theItem){
-    var winHeight = $(window).height();
-    var windowMiddle = winHeight/2;
-    var itemMiddle = $(theItem).height()/2;
-    var theMiddle = windowMiddle-itemMiddle;
-    if(winHeight>$(theItem).height()){
-        $(theItem).css("margin-top", theMiddle + "px");
-    } else {
-        $(theItem).css("margin-top", "0px" );
-    }
-}
-
-$(document).ready(function(){
-    CenterItem(".container");
-});
-
-$(window).resize(function(){
-    CenterItem(".container");
-});
-</script>
-{% endblock %}
 {% block title %}Login{% endblock %}
 {% block content %}
 
@@ -54,7 +31,7 @@ $(window).resize(function(){
                 </div>
                 <div class="control-group">
                     <div class="controls">
-                        <input type="submit" value="Logg inn" class="btn btn-default" />
+                        <input type="submit" value="Logg inn" class="btn btn-primary" />
                         <input type="hidden" name="next" value="{{ next }}" />
                     </div>
                 </div>
