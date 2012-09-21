@@ -113,7 +113,7 @@ MEDIA_URL = 'http://media.mk.bitnexus.net:1350/'
 
 # Filebrowser-settings
 FILEBROWSER_MEDIA_ROOT = MEDIA_ROOT
-FILEBROWSER_MEDIA_URL = "http://media.mk.bitnexus.net:1350/filebrowser"
+FILEBROWSER_MEDIA_URL = MEDIA_URL
 FILEBROWSER_DIRECTORY = 'filebrowser' # Relative to media root
 
 # Absolute path to the directory static files should be collected to.
