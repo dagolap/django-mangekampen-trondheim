@@ -112,9 +112,9 @@ MEDIA_ROOT = "/home/mangekampentrondheim/media/"
 MEDIA_URL = 'http://media.mk.bitnexus.net:1350/'
 
 # Filebrowser-settings
-FILEBROWSER_MEDIA_ROOT = os.path.join(MEDIA_ROOT, 'filebrowser')
-FILEBROWSER_MEDIA_URL = MEDIA_URL
-FILEBROWSER_DIRECTORY = '' # Relative to media root
+FILEBROWSER_MEDIA_ROOT = MEDIA_ROOT
+FILEBROWSER_MEDIA_URL = "http://media.mk.bitnexus.net:1350/filebrowser"
+FILEBROWSER_DIRECTORY = 'filebrowser' # Relative to media root
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
