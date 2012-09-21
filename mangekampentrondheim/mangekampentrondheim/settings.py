@@ -43,7 +43,7 @@ MESSAGE_TAGS = {messages.DEBUG: 'alert-error',
 
 
 ## Filebrowser image versions
-FILEBROWSER_VERSIONS_BASEDIR = 'versions'
+FILEBROWSER_VERSIONS_BASEDIR = 'versions/'
 FILEBROWSER_VERSIONS =  {
     'thumbnail': {'verbose_name': 'Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
     'small': {'verbose_name': 'Small', 'width': 140, 'height': '', 'opts': ''},
@@ -115,7 +115,7 @@ MEDIA_URL = 'http://media.mk.bitnexus.net:1350/'
 # Filebrowser-settings
 FILEBROWSER_MEDIA_ROOT = MEDIA_ROOT
 FILEBROWSER_MEDIA_URL = MEDIA_URL
-FILEBROWSER_DIRECTORY = 'filebrowser' # Relative to media root
+FILEBROWSER_DIRECTORY = 'filebrowser/' # Relative to media root
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
