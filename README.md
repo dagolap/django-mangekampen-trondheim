@@ -14,24 +14,24 @@ New mangekampen application written in Python/Django
 
 * Create your own local_settings.py to use local database.
 
-    cp local_settings.py.template local_settings.py
+        cp local_settings.py.template local_settings.py
 
 * Syncronize core django tables to the database
 
-    python manage.py syncdb
-    # Say NO to creating a superuser at this point, as we do not have a UserProfile table yet.
+        python manage.py syncdb
+        # Say NO to creating a superuser at this point, as we do not have a UserProfile table yet.
 
 * Create database schema for mangekampen application
     
-    python manage.py migrate
+        python manage.py migrate
 
 * Now you can create a superuser to log in to the system with
 
-    python manage.py createsuperuser
+        python manage.py createsuperuser
 
 * Start the web server and begin development
     
-     python manage.py runserver <ip to listen on>:<port number>
+        python manage.py runserver <ip to listen on>:<port number>
 
 
 ## Setup for prod environment
@@ -41,28 +41,28 @@ New mangekampen application written in Python/Django
 * Create a virtualenv 
 * Source and the newly created virtualenv and then install requirements
 
-    pip install -r requirements_local.txt
+        pip install -r requirements_local.txt
 
 * Syncronize core django tables to the database
 
-    python manage.py syncdb
-    # Say NO to creating a superuser at this point, as we do not have a UserProfile table yet.
+        python manage.py syncdb
+        # Say NO to creating a superuser at this point, as we do not have a UserProfile table yet.
 
 * Create database schema for mangekampen application
 
-    python manage.py migrate
+        python manage.py migrate
 
 * Now you can create a superuser to log in to the system with
 
-    python manage.py createsuperuser
+        python manage.py createsuperuser
 
 * Collect static content and move it to static hosting location
 
-    python manage.py collectstatic
+        python manage.py collectstatic
 
 * Test your setup using a gunicorn server
 
-    python manage.py run_gunicorn -b 0.0.0.0:<some port>
+        python manage.py run_gunicorn -b 0.0.0.0:<some port>
 
 If this works you can now set up nginx, apache or similar to proxy to the
 gunicorn server.  Alternatively you can use wsgi-modules for apache to proxy
@@ -70,7 +70,7 @@ through the built in modules. Also you must set up static file hosting for the
 locations defined in settings.py for media and static files.
 
 ## For mangekampen trondheim server stuff.
-* Run the automatic deployment script in the mangekampen user home folder.
+Run the automatic deployment script in the mangekampen user home folder.
 
     ./deploy-mangekampen.sh
 
