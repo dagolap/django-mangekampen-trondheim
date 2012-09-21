@@ -44,14 +44,13 @@ MESSAGE_TAGS = {messages.DEBUG: 'alert-error',
 ## Filebrowser image versions
 FILEBROWSER_VERSIONS_BASEDIR = 'versions'
 FILEBROWSER_VERSIONS =  {
-    'admin_thumbnail': {'verbose_name': 'Admin Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
     'thumbnail': {'verbose_name': 'Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
     'small': {'verbose_name': 'Small', 'width': 140, 'height': '', 'opts': ''},
     'medium': {'verbose_name': 'Medium', 'width': 300, 'height': '', 'opts': ''},
     'large': {'verbose_name': 'Large', 'width': 460, 'height': '', 'opts': ''},
 }
 FILEBROWSER_ADMIN_VERSIONS = ['thumbnail', 'small', 'medium', 'large']
-FILEBROWSER_ADMIN_THUMBNAIL = 'admin_thumbnail'
+FILEBROWSER_ADMIN_THUMBNAIL = 'thumbnail'
 
 
 ## Default login url when someone doesnt have @login_required
@@ -113,9 +112,9 @@ MEDIA_ROOT = "/home/mangekampentrondheim/media/"
 MEDIA_URL = 'http://media.mk.bitnexus.net:1350/'
 
 # Filebrowser-settings
-FILEBROWSER_MEDIA_ROOT = MEDIA_ROOT
+FILEBROWSER_MEDIA_ROOT = os.path.join(MEDIA_ROOT, 'filebrowser')
 FILEBROWSER_MEDIA_URL = MEDIA_URL
-FILEBROWSER_DIRECTORY = 'filebrowser/' # Relative to media root
+FILEBROWSER_DIRECTORY = '' # Relative to media root
 
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
