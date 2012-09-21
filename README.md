@@ -9,8 +9,8 @@ New mangekampen application written in Python/Django
 * Create a virtualenv 
 * Source the newly created virtualenv and then install requirements
     
-    source path_to_virtualenv/bin/activate
-    pip install -r requirements_local.txt
+        source path_to_virtualenv/bin/activate
+        pip install -r requirements_local.txt
 
 * Create your own local_settings.py to use local database.
 
