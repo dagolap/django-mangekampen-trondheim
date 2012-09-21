@@ -70,8 +70,9 @@
 </script>
 {% endblock %}
 {% block content %}
+    <a href="{% url ical season %}" class="pull-right btn btn-primary">Last ned iCal</a>
     <div class="row-fluid">
-            <h1 name"future">Kommende events</h1>
+            <h1 name="future">Kommende events</h1>
             {% for event in future_events %}
               {% if forloop.counter0|divisibleby:"3" %}
                {% if forloop.counter0 != 0 %}
@@ -111,7 +112,7 @@
                    </div>
                {%endif%}
             {% endfor %}
-            <h1 name"past">Tidligere events</h1>
+            <h1 name="past">Tidligere events</h1>
             {% for event in past_events %}
                {% if forloop.counter0|divisibleby:"3" %}
                     {% if forloop.counter0 != 0 %}

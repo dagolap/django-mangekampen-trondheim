@@ -217,7 +217,8 @@ def events_listing(request, season_id=None):
     past_events = current_season.get_past_events() if current_season else []
     future_events = current_season.get_future_events() if current_season else []
     context = {'past_events':past_events,
-               'future_events':future_events
+               'future_events':future_events,
+               'season':current_season.id,
               }
     return render(request, 'mangekamp/events_listing.html', context)  
 
