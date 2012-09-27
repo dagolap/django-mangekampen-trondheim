@@ -68,6 +68,16 @@
         placement: 'top'
     });
 </script>
+
+<style>
+    .rotated-eventdate {
+        -moz-transform:rotate(-90deg); 
+        -webkit-transform:rotate(-90deg);
+        -o-transform:rotate(-90deg);
+        -ms-transform:rotate(-90deg);
+        -transform:rorate(-90deg);
+    }</style>
+
 {% endblock %}
 {% block content %}
     <a href="{% url ical season %}" class="pull-right btn btn-primary">Last ned iCal</a>
@@ -83,7 +93,7 @@
                <table class="thumbnail span4">
                     <tr>
                         <td>
-                            <div style="-moz-transform:rotate(-90deg); -webkit-transform:rotate(-90deg)">
+                            <div class="rotated-eventdate">
                                 <h2>Uke{{event.time|date:"W"}}</h2>
                             </div> 
                         </td>
@@ -123,7 +133,7 @@
                <table class="thumbnail span4">
                     <tr>
                         <td>
-                            <div style="-moz-transform:rotate(-90deg); -webkit-transform:rotate(-90deg)"> 
+                            <div class="rotated-eventdate"> 
                                 <h2>Uke{{event.time|date:"W"}}</h2>
                             </div> 
                         </td>
