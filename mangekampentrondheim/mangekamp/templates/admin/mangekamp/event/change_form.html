@@ -10,8 +10,7 @@
                 var loading_anim_timer = setTimeout(function() {
                     loading.show();
                 }, 100);
-                // TODO: Resolve correct event
-                $.get("/email_event/1", function(data) {
+                $.get("/email_event/{{ object_id }}", function(data) {
                     $("#mail-dialog").dialog();
                     document.getElementById("mail-dialog").innerHTML = data;
                     clearTimeout(loading_anim_timer);
