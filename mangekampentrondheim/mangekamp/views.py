@@ -253,10 +253,12 @@ def email_event(request, event_id):
             return HttpResponseRedirect(reverse('admin:index'))
         else: 
             context['form'] = form
+            context['event_id'] = event_id
             return render(request, 'mangekamp/event_emailform.html',  context)
     else:
         form = EmailEventForm()
         context['form'] = form
+        context['event_id'] = event_id
         return render(request, 'mangekamp/event_emailform.html', context)
 
 @login_required
