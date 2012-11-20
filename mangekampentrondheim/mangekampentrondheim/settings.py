@@ -43,7 +43,7 @@ MESSAGE_TAGS = {messages.DEBUG: 'alert-error',
 
 
 ## Filebrowser image versions
-#FILEBROWSER_VERSIONS_BASEDIR = 'versions/'
+FILEBROWSER_VERSIONS_BASEDIR = 'versions/'
 FILEBROWSER_VERSIONS =  {
     'thumbnail': {'verbose_name': 'Thumbnail', 'width': 60, 'height': 60, 'opts': 'crop'},
     'small': {'verbose_name': 'Small', 'width': 140, 'height': '', 'opts': ''},
