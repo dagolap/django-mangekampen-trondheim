@@ -85,6 +85,7 @@ INSTALLED_APPS = (
     'registration',
     'debug_toolbar',
     'mangekamp',
+    'django.contrib.markup',
 )
 
 # A sample logging configuration. The only tangible logging

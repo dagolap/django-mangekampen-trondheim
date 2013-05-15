@@ -193,6 +193,7 @@ INSTALLED_APPS = (
     'registration',
     'gunicorn',
     'mangekamp',
+    'django.contrib.markup',
 )
 
 # A sample logging configuration. The only tangible logging
