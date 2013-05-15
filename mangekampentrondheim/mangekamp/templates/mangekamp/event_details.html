@@ -110,6 +110,10 @@
 
     }
 
+    #resultrow {
+        margin-top: 20px;
+    }
+
     #eventimage {
         max-height: 400px;
         overflow: hidden;
@@ -165,14 +169,14 @@
                         <tr><td class="tableidx">Tid</td><td>{{ event.time }}</td></tr>
                         <tr><td class="tableidx">Sted</td><td><a href="{{ event.location_url }}">{{ event.location }}</td></tr>
                         <tr><td colspan=2><div id="signup">
-            {% if not event.finished %}
-                {% if event|has_user:request.user %}
-                    <a id="signup_{{event.id}}" class="btn signup_btn btn-success signed_up">Påmeldt</a>
-                {% else %}
-                    <a id="signup_{{event.id}}" class="btn signup_btn">Meld meg på!</a>
-                {% endif %}
-            {% endif %}
-            </div></td></tr>
+                            {% if not event.finished %}
+                                {% if event|has_user:request.user %}
+                                    <a id="signup_{{event.id}}" class="btn signup_btn btn-success signed_up">Påmeldt</a>
+                                {% else %}
+                                    <a id="signup_{{event.id}}" class="btn signup_btn">Meld meg på!</a>
+                                {% endif %}
+                            {% endif %}
+                            </div></td></tr>
                     </table>
                 </div>   
                 <div id="eventdescription" class="">
@@ -180,7 +184,34 @@
                     {{ event.description }}
                     </p>
                 </div> 
-            </div>    
+            </div>
+            {% if event.finished %}
+                {% if scores %}
+                    <div class="row-fluid" id="resultrow">
+                    <div class="span12">
+                        <h3>Resultater</h3>
+                    </div>  
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Navn</th>
+                                    <th>Plassering</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            {% for s in scores %}
+                                <tr>
+                                    <td>{{ s.participant.get_full_name }}</td>
+                                    <td>{{ s.score }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    Det foreligger ingen resultater for denne konkurransen. Trolig har ikke ansvarlig registrert poengene i systemet ennå.
+                {% endif %}
+            {% endif %} 
         </div>
     </div>
 {% endblock %}
