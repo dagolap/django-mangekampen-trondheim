@@ -64,10 +64,6 @@
 
 }
 
-#signup a {
-    vertical-align: middle;
-    width: 100px;
-}
 
 .tableidx {
     font-weight: bold;
@@ -85,19 +81,45 @@
     }
 
     #signup a {
-        width: 150px;
+        /* width: 150px;
         height: 50px;
         vertical-align: middle;
         line-height: 50px;
         float: right;
-        margin-top: -100px;
-        margin-right: 20px;
+        margin-top: -150px;
+        margin-right: 5px;
+        position: relative; */
+        width: 88%;
+        margin-top: 10px;
         position: relative;
+        float: right;
     }
 
     #underpicture {
-    margin-top: 100px;
-}
+        margin-top: 100px;
+    }
+
+    #eventdetails {
+        max-width: 400px;
+        min-width: 100px;
+        float: right;
+        padding-left: 20px;
+    }
+
+    #eventdescription {
+
+    }
+
+    #eventimage {
+        max-height: 400px;
+        overflow: hidden;
+    }
+
+    #eventimage img {
+        width: 100%;
+        min-width: 100%;
+    }
+
 }
 
 @media (max-width: 700px) {
@@ -130,27 +152,28 @@
 {% block content %}
     <div class="row-fluid">
         <div id="eventcontainer" class="span12">
-            <div id="eventimage">
+            <div class="img-rounded"id="eventimage" >
                 <img class="img-rounded" src="{{ event.image.url }}" alt="" />
             </div>
             <h1 id="eventname">{{ event.name }}</h1>
-            <div id="signup">
-            {% if event|has_user:request.user %}
-                <a id="signup_{{event.id}}" class="btn signup_btn btn-success signed_up">Påmeldt</a>
-            {% else %}
-                <a id="signup_{{event.id}}" class="btn signup_btn">Meld meg på!</a>
-            {% endif %}
-            </div>
+            
             <div id="underpicture" class="row-fluid">
-                <div id="eventdetails" class="span6">
+                <div id="eventdetails" class="">
                     <table>
                         <tr><td class="tableidx">Kategori</td><td>{{ event.get_category_display }}</td></tr>
                         <tr><td class="tableidx">Kontaktperson</td><td>{{ event.administrator }}</td></tr>
                         <tr><td class="tableidx">Tid</td><td>{{ event.time }}</td></tr>
                         <tr><td class="tableidx">Sted</td><td><a href="{{ event.location_url }}">{{ event.location }}</td></tr>
+                        <tr><td colspan=2><div id="signup">
+            {% if event|has_user:request.user %}
+                <a id="signup_{{event.id}}" class="btn signup_btn btn-success signed_up">Påmeldt</a>
+            {% else %}
+                <a id="signup_{{event.id}}" class="btn signup_btn">Meld meg på!</a>
+            {% endif %}
+            </div></td></tr>
                     </table>
                 </div>   
-                <div id="eventdescription" class="span6">
+                <div id="eventdescription" class="">
                     <p>
                     {{ event.description }}
                     </p>
