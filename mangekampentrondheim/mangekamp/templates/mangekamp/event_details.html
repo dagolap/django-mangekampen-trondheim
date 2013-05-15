@@ -1,0 +1,161 @@
+{% extends "mangekamp/base.html" %}
+{% load filters %}
+{% block scripts %}
+<script>
+    $(".signup_btn").click(function() {
+        var clicked_button = $(this);
+        var event_id = $(this).attr('id').split("_")[1];
+        var loading = $("#loading-indicator");
+        var loading_anim_timer = setTimeout(function() {
+            loading.show();
+        }, 10);
+        $.ajax({url:"/signup/"+event_id}).done(function(data) {
+            clearTimeout(loading_anim_timer);
+            loading.hide();
+            var result = jQuery.parseJSON(data);
+            if (result.signed_up == true) {
+                clicked_button.html("Påmeldt");
+                clicked_button.removeClass("btn-danger");
+                clicked_button.addClass("btn-success signed_up");
+            } else if (result.signed_up == false) {
+                clicked_button.html("Meld meg på!");
+                clicked_button.removeClass("btn-success btn-danger signed_up");
+            }
+        });
+    });
+
+    $(".signup_btn").mouseover(function() {
+        var btn = $(this);
+        if (btn.hasClass("signed_up")) {
+            btn.html("Meld av");
+            btn.removeClass("btn-success");
+            btn.addClass("btn-danger");
+        } else if (!btn.hasClass("signed_up")) {
+            btn.html("Meld meg på!");
+            btn.removeClass("btn-danger");
+            btn.addClass("btn-success");
+        }
+    });
+
+    $(".signup_btn").mouseout(function() {
+        var btn = $(this);
+        if (!btn.hasClass("signed_up")) {
+            btn.html("Meld meg på!");
+            btn.removeClass("btn-success");
+        } else if (btn.hasClass("signed_up")) {
+            btn.html("Påmeldt");
+            btn.removeClass("btn-danger");
+            btn.addClass("btn-success");
+        }
+    });
+</script>
+
+
+
+<style type="text/css">
+#eventimage img {
+    width: 100%;
+    min-width: 100%;
+}
+
+#eventname {
+    vertical-align: middle;
+    position: relative;
+
+}
+
+#signup a {
+    vertical-align: middle;
+    width: 100px;
+}
+
+.tableidx {
+    font-weight: bold;
+    padding-right: 10px;
+}
+
+@media (min-width: 700px) {
+    #eventname {
+        background-color:rgba(255,255,255,0.65);
+        margin-top: -150px;
+        margin-bottom: 80px;
+        padding-left: 20px;
+        opacity: 50%;
+        line-height: 80px;
+    }
+
+    #signup a {
+        width: 150px;
+        height: 50px;
+        vertical-align: middle;
+        line-height: 50px;
+        float: right;
+        margin-top: -100px;
+        margin-right: 20px;
+        position: relative;
+    }
+
+    #underpicture {
+    margin-top: 100px;
+}
+}
+
+@media (max-width: 700px) {
+    #eventname {
+        text-align: center;
+    }
+
+    #signup a {
+        width: 90%;
+
+    }
+
+    #signup {
+        text-align: center;
+    }
+
+    table {
+        margin-top: 40px;
+        width: 100%;
+    }
+
+    #eventdescription {
+        margin-top: 10px;
+    }
+}
+
+
+</style>
+{% endblock %}
+{% block content %}
+    <div class="row-fluid">
+        <div id="eventcontainer" class="span12">
+            <div id="eventimage">
+                <img class="img-rounded" src="{{ event.image.url }}" alt="" />
+            </div>
+            <h1 id="eventname">{{ event.name }}</h1>
+            <div id="signup">
+            {% if event|has_user:request.user %}
+                <a id="signup_{{event.id}}" class="btn signup_btn btn-success signed_up">Påmeldt</a>
+            {% else %}
+                <a id="signup_{{event.id}}" class="btn signup_btn">Meld meg på!</a>
+            {% endif %}
+            </div>
+            <div id="underpicture" class="row-fluid">
+                <div id="eventdetails" class="span6">
+                    <table>
+                        <tr><td class="tableidx">Kategori</td><td>{{ event.get_category_display }}</td></tr>
+                        <tr><td class="tableidx">Kontaktperson</td><td>{{ event.administrator }}</td></tr>
+                        <tr><td class="tableidx">Tid</td><td>{{ event.time }}</td></tr>
+                        <tr><td class="tableidx">Sted</td><td><a href="{{ event.location_url }}">{{ event.location }}</td></tr>
+                    </table>
+                </div>   
+                <div id="eventdescription" class="span6">
+                    <p>
+                    {{ event.description }}
+                    </p>
+                </div> 
+            </div>    
+        </div>
+    </div>
+{% endblock %}

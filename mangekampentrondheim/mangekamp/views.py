@@ -206,6 +206,12 @@ def scoreboard_excel(request, season_id):
     doc.save(response)
     return response
 
+@login_required
+def event_details(request, event_id=None):
+    event = get_object_or_404(Event, id=event_id)
+
+    context = {'event':event}
+    return render(request, 'mangekamp/event_details.html', context) 
 
 @login_required
 def events_listing(request, season_id=None):
