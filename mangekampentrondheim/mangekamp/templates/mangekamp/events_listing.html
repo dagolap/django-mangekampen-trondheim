@@ -99,7 +99,7 @@
                         </td>
                         <td>
                             <ul class="unstyled">
-                                    <li><h3 style="text-align:center;">{{ event.name }} ({{ event.get_category_display }})</h3></li>
+                                    <li><a href="{% url event_details event.id %}"><h3 style="text-align:center;">{{ event.name }}</h3></a><h3 style="text-align:center;"> ({{ event.get_category_display }})</h3></li>
                                     <li><div style="height:100px; overflow:hidden;"><img src={{ event.image.url }} alt="" class="span12"></div></li>
                                     <li>
                                         <p style="padding-top:5px">
@@ -139,7 +139,7 @@
                         </td>
                         <td>
                             <ul class="unstyled">
-                                <li><h3 style="text-align:center;">{{ event.name }} ({{ event.get_category_display }})</h3></li>
+                                <li><a href="{% url event_details event.id %}"><h3 style="text-align:center;">{{ event.name }}</h3></a><h3 style="text-align:center;"> ({{ event.get_category_display }})</h3></li>
                                 <li><div style="height:100px; overflow:hidden;"><img src={{ event.image.url }} alt="" class="span12"></div></li>
                                 <li>
                                     <p style="padding-top:5px">

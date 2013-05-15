@@ -3,19 +3,19 @@
 
 {% block scripts %}
 <script>
-    $(".results_btn").click(function() {
-        var btn = $(this);
-        var loading = $("#loading-indicator");
-        var loading_anim_timer = setTimeout(function() {
-            loading.show();
-        }, 100);
-        var event_id = btn.attr('id').split("_")[1];
-        $("#modal_dialog").load("/results/"+event_id, function() {
-            $("#modal_dialog").modal();
-            clearTimeout(loading_anim_timer);
-            loading.hide();
-        });
-    });
+    // $(".results_btn").click(function() {
+    //     var btn = $(this);
+    //     var loading = $("#loading-indicator");
+    //     var loading_anim_timer = setTimeout(function() {
+    //         loading.show();
+    //     }, 100);
+    //     var event_id = btn.attr('id').split("_")[1];
+    //     $("#modal_dialog").load("/results/"+event_id, function() {
+    //         $("#modal_dialog").modal();
+    //         clearTimeout(loading_anim_timer);
+    //         loading.hide();
+    //     });
+    // });
 
     $(".gender-toggle").click(function() {
         var gender = $(this).attr('id');
@@ -84,7 +84,7 @@
             <th><div class="rotated-header">Arrangementer</div></th>
             <th><div class="rotated-header">Status</div></th>       
             {% for event in events %}
-            <th><div class="rotated-header"> <a  class="results_btn scoreboard-event-title"id="results_{{event.id}}" >{{ event.name }}</a>{{event.category|category_tag|safe}}</div></th>    
+            <th><div class="rotated-header"> <a href="{% url event_details event.id %}" class="results_btn scoreboard-event-title"id="results_{{event.id}}" >{{ event.name }}</a>{{event.category|category_tag|safe}}</div></th>    
             {% endfor %}
         </tr>
         <tr>
