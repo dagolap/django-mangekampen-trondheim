@@ -165,10 +165,12 @@
                         <tr><td class="tableidx">Tid</td><td>{{ event.time }}</td></tr>
                         <tr><td class="tableidx">Sted</td><td><a href="{{ event.location_url }}">{{ event.location }}</td></tr>
                         <tr><td colspan=2><div id="signup">
-            {% if event|has_user:request.user %}
-                <a id="signup_{{event.id}}" class="btn signup_btn btn-success signed_up">Påmeldt</a>
-            {% else %}
-                <a id="signup_{{event.id}}" class="btn signup_btn">Meld meg på!</a>
+            {% if not event.finished %}
+                {% if event|has_user:request.user %}
+                    <a id="signup_{{event.id}}" class="btn signup_btn btn-success signed_up">Påmeldt</a>
+                {% else %}
+                    <a id="signup_{{event.id}}" class="btn signup_btn">Meld meg på!</a>
+                {% endif %}
             {% endif %}
             </div></td></tr>
                     </table>
