@@ -255,7 +255,6 @@ def email_event(request, event_id):
         if form.is_valid():
             # TODO: Send to everyone
             emails = [p.participant.userprofile.get_email() for p in Participation.objects.select_related().filter(event__id=event_id)]
-            print emails
             send_mail(form.cleaned_data['title'], form.cleaned_data['body'], 'Mangekampen <Capgemini.Trondheim.MK@gmail.com>', emails, fail_silently=False) 
             messages.add_message(request, messages.SUCCESS, 'Epost ble sendt.')
             # TODO: Better redirect
