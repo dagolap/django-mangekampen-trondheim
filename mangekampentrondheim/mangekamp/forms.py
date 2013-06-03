@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from registration.forms import RegistrationForm
 
-from mangekamp.models import UserProfile
+from mangekamp.models import UserProfile, Event
 
 class MangekampRegistrationForm(RegistrationForm):
     """
